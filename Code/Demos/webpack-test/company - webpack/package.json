@@ -1,0 +1,25 @@
+{
+  "name": "company",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "jquery": "^3.2.1"
+  },
+  "devDependencies": {
+    "webpack": "^3.4.1"
+  },
+  "scripts": {
+    "start": "node r.js -o build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tailorr/company.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tailorr/company/issues"
+  },
+  "homepage": "https://github.com/tailorr/company#readme"
+}

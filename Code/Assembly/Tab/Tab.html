@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Tab组件</title>
+</head>
+<style>
+    .tab {
+        margin: 200px auto;
+        max-width: 80%;
+    }
+    
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    
+    .tabs {
+        display: flex;
+    }
+    
+    .tabs>li {
+        width: 15%;
+        line-height: 32px;
+        text-align: center;
+        background: #fff;
+        border: 1px solid #ccc;
+        cursor: pointer;
+    }
+    
+    .tabs>li:hover {
+        background: #eee;
+        color: #fff;
+    }
+    
+    .tabs>li:first-child {
+        border-right: none;
+        border-radius: 6px 0 0 0;
+    }
+    
+    .tabs>li:last-child {
+        border-left: none;
+        border-radius: 0 6px 0 0;
+    }
+    
+    .tabs>li.active {
+        background: #eee;
+    }
+    
+    .panels {
+        position: relative;
+        height: 100%;
+    }
+    
+    .panels>li {
+        position: absolute;
+        top: -1px;
+        width: 100%;
+        background: #fff;
+        text-align: center;
+        border: 1px solid #ccc;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        visibility: hidden;
+        opacity: 0;
+        transition: all .5s;
+    }
+    
+    .panels>li.active {
+        visibility: visible;
+        opacity: 1;
+    }
+</style>
+
+<body>
+    <div class="tab">
+        <ul class="tabs">
+            <li class="active">1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+        <ul class="panels">
+            <li class="active">panel1</li>
+            <li>panel2</li>
+            <li>panel3</li>
+        </ul>
+    </div>
+    <div class="tab">
+        <ul class="tabs">
+            <li class="active">1</li>
+            <li>2</li>
+            <li>3</li>
+        </ul>
+        <ul class="panels">
+            <li class="active">panel1</li>
+            <li>panel2</li>
+            <li>panel3</li>
+        </ul>
+    </div>
+    <script src="./bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+        var TabCenter = (function() {
+            function init($tab) {
+                $tab.each(function() {
+                    var $this = $(this)
+                    if ($this.hasClass('init')) return
+                    new Tab($this)
+                    $this.addClass('init')
+                })
+            }
+
+            function Tab($tab) {
+                this.$tab = $tab
+                this.$tabs = this.$tab.find('.tabs')
+                this.$panels = this.$tab.find('.panels li')
+                console.log(this.$tab)
+                this._bindEvent()
+            }
+            Tab.prototype = {
+                _bindEvent: function() {
+                    var _this = this
+                    this.$tabs.on('click', 'li', function() {
+                        console.log(_this.$panels)
+                        $(this).addClass('active').siblings().removeClass('active')
+                        _this.$panels.removeClass('active').eq($(this).index()).addClass('active')
+                    })
+                }
+            }
+            return {
+                init: init
+            }
+        })()
+        TabCenter.init($('.tab'))
+    </script>
+</body>
+
+</html>

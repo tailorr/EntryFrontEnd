@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: "宋体", Arial, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+        
+        ul,
+        li {
+            margin: 0;
+            padding: 0
+        }
+        
+        ul {
+            list-style: none
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        .news-wrap li {
+            padding: 15px;
+            /*border: 1px solid #ccc;*/
+            margin: 10px;
+            text-align: center;
+            border-radius: 4px;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08), -2px 0 6px rgba(0, 0, 0, 0.08);
+        }
+        
+        .news-wrap li:hover {
+            background: #E27272;
+        }
+        
+        .load-more {
+            height: 40px;
+            line-height: 40px;
+            width: 80px;
+            border: 1px solid #E27272;
+            border-radius: 3px;
+            text-align: center;
+            text-decoration: none;
+            color: #E27272;
+            display: block;
+            margin: 10px auto;
+            background: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <ul class="news-wrap">
+        <!--<li>111</li>
+        <li>222</li>-->
+    </ul>
+    <button class="load-more">Load More</button>
+
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script>
+        var pageIndex = 1;
+        var isLoading = true;
+
+        getNews(pageIndex);
+        pageIndex++;
+
+        $('.load-more').on('click', function() {
+            if (!isLoading) return;
+            isLoading = false;
+            getNews(pageIndex);
+            isLoading = true;
+            pageIndex++;
+        })
+
+        function getNews(page) {
+            $.ajax({
+                url: '/getNews',
+                method: 'GET',
+                data: {
+                    page: page,
+                    length: 3
+                }
+            }).done(function(response) {
+                if (response.status === 0) {
+                    appendNews(response.data)
+                    page++;
+
+                } else {
+                    console.log('数据不对')
+                }
+            }).fail(function() {
+                console.log('加载失败！')
+            })
+        }
+
+        function appendNews(news) {
+            var htmlString = ''
+            $(news).each(function(index) {
+                htmlString += '<li>' + news[index] + '</li>'
+            })
+            $('.news-wrap').append(htmlString)
+        }
+    </script>
+</body>
+
+</html>
+<div id="outer" style="background:#099">
+    click outer
+    <p id="inner" style="background:#9C0">click inner</p>
+    <br>
+</div>
+
+<script type="text/javascript">
+    function G(id) {
+        return document.getElementById(id);
+    }
+
+    function addEvent(obj, ev, handler) {
+        if (window.attachEvent) {
+            obj.attachEvent("on" + ev, handler);
+        } else if (window.addEventListener) {
+            obj.addEventListener(ev, handler, false);
+        }
+    }
+
+    function test(e) {
+        alert("e.target.tagName : " + e.target.tagName + "\n e.currentTarget.tagName : " + e.currentTarget.tagName);
+    }
+    var outer = G("outer");
+    var inner = G("inner");
+    //addEvent(inner, "click", test);  
+    addEvent(outer, "click", test);
+</script>

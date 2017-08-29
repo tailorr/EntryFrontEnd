@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* 容器样式设置 */
+        
+        .container,
+        .container-fluid {
+            padding: -1%;
+            /* 设置padding是为了后面Column直接嵌套Row预留 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .container *,
+        .container-fluid * {
+            box-sizing: border-box;
+            /* 盒模型渲染样式设置 */
+        }
+        
+        @media (min-width:768px) {
+            .container {
+                width: 750px;
+            }
+        }
+        
+        @media (min-width:992px) {
+            .container {
+                width: 970px;
+            }
+        }
+        
+        @media (min-width:1200px) {
+            .container {
+                width: 1170px;
+            }
+        }
+        
+        .row {
+            margin: -1%;
+            /* Container设置了padding，所以Row需要设置-margin让Row占满Container的宽度 */
+        }
+        
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        [class*='col-'] {
+            float: left;
+            min-height: 1px;
+            /* column最小高度设置 */
+            padding: 1%;
+            /* Gutter的设置 同时和前面Container设置的一样，所以Column里面可以直接嵌套Row，而不需要Container */
+            transition: all 0.3s linear;
+            /* 响应式的时候加了一点过渡，视觉效果比较平滑 */
+        }
+        /* 默认超小屏幕 屏幕宽度小于768px*/
+        
+        .col-xs-1 {
+            width: 8.33333%;
+        }
+        
+        .col-xs-2 {
+            width: 16.66667%;
+        }
+        
+        .col-xs-3 {
+            width: 25%;
+        }
+        
+        .col-xs-4 {
+            width: 33.33333%;
+        }
+        
+        .col-xs-5 {
+            width: 41.66667%;
+        }
+        
+        .col-xs-6 {
+            width: 50%;
+        }
+        
+        .col-xs-7 {
+            width: 58.33333%;
+        }
+        
+        .col-xs-8 {
+            width: 66.66667%;
+        }
+        
+        .col-xs-9 {
+            width: 75%;
+        }
+        
+        .col-xs-10 {
+            width: 83.33333%;
+        }
+        
+        .col-xs-11 {
+            width: 91.66667%;
+        }
+        
+        .col-xs-12 {
+            width: 100%;
+        }
+        /* 小屏幕 平板等 屏幕宽度大于等于768px */
+        
+        @media (min-width: 768px) {
+            .col-sm-1 {
+                width: 8.33333%;
+            }
+            .col-sm-2 {
+                width: 16.66667%;
+            }
+            .col-sm-3 {
+                width: 25%;
+            }
+            .col-sm-4 {
+                width: 33.33333%;
+            }
+            .col-sm-5 {
+                width: 41.66667%;
+            }
+            .col-sm-6 {
+                width: 50%;
+            }
+            .col-sm-7 {
+                width: 58.33333%;
+            }
+            .col-sm-8 {
+                width: 66.66667%;
+            }
+            .col-sm-9 {
+                width: 75%;
+            }
+            .col-sm-10 {
+                width: 83.33333%;
+            }
+            .col-sm-11 {
+                width: 91.66667%;
+            }
+            .col-sm-12 {
+                width: 100%;
+            }
+        }
+        /* 中等屏幕 桌面显示器等 屏幕宽度大于等于992px */
+        
+        @media (min-width: 992px) {
+            .col-md-1 {
+                width: 8.33333%;
+            }
+            .col-md-2 {
+                width: 16.66667%;
+            }
+            .col-md-3 {
+                width: 25%;
+            }
+            .col-md-4 {
+                width: 33.33333%;
+            }
+            .col-md-5 {
+                width: 41.66667%;
+            }
+            .col-md-6 {
+                width: 50%;
+            }
+            .col-md-7 {
+                width: 58.33333%;
+            }
+            .col-md-8 {
+                width: 66.66667%;
+            }
+            .col-md-9 {
+                width: 75%;
+            }
+            .col-md-10 {
+                width: 83.33333%;
+            }
+            .col-md-11 {
+                width: 91.66667%;
+            }
+            .col-md-12 {
+                width: 100%;
+            }
+        }
+        /* 大屏幕 大桌面显示器等 屏幕宽度大于等于1200px */
+        
+        @media (min-width: 1200px) {
+            .col-lg-1 {
+                width: 8.33333%;
+            }
+            .col-lg-2 {
+                width: 16.66667%;
+            }
+            .col-lg-3 {
+                width: 25%;
+            }
+            .col-lg-4 {
+                width: 33.33333%;
+            }
+            .col-lg-5 {
+                width: 41.66667%;
+            }
+            .col-lg-6 {
+                width: 50%;
+            }
+            .col-lg-7 {
+                width: 58.33333%;
+            }
+            .col-lg-8 {
+                width: 66.66667%;
+            }
+            .col-lg-9 {
+                width: 75%;
+            }
+            .col-lg-10 {
+                width: 83.33333%;
+            }
+            .col-lg-11 {
+                width: 91.66667%;
+            }
+            .col-lg-12 {
+                width: 100%;
+            }
+        }
+        /* 偏移设置 */
+        
+        .col-offset-1 {
+            margin-left: 8.333333%
+        }
+        /* 其他样式 */
+        
+        body {
+            margin: 0;
+            background-color: #414141;
+        }
+        
+        h1 {
+            text-align: center;
+        }
+        
+        [class*='col-']>.item {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-align: center;
+            color: #fff;
+            background-color: #080808;
+            /* background-color: rgba(255, 255, 255, 0.5); */
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>GRID SYSTEM DEMO</h1>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-xs-12 col-sm-12 col-md-6 col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-6</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-2'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-2</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-1'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-1</div>
+            </div>
+        </div>
+
+        <div class='row'>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='row'>
+                    <div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'>
+                        <div class='row'>
+                            <div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'>
+                                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-6</div>
+                            </div>
+                            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-2'>
+                                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-2</div>
+                            </div>
+                            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+                            </div>
+                            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-1'>
+                                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='col-xs-12 col-sm-12 col-md-6  col-lg-2'>
+                        <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-2</div>
+                    </div>
+                    <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                        <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+                    </div>
+                    <div class='col-xs-12 col-sm-12 col-md-6  col-lg-1'>
+                        <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-1</div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+            <div class='col-xs-12 col-sm-12 col-md-6  col-lg-3'>
+                <div class='item'>col-xs-12 col-sm-12 col-md-6 col-lg-3</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

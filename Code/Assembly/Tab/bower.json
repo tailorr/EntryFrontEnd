@@ -1,0 +1,20 @@
+{
+  "name": "Tab",
+  "homepage": "https://github.com/tailorr/code",
+  "authors": [
+    "tail <15152462580@126.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "^3.2.1"
+  }
+}

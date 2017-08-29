@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        /* 容器样式设置 */
+        
+        .container,
+        .container-fluid {
+            padding-left: 15px;
+            /* 设置padding是为了后面Column直接嵌套Row预留 */
+            padding-right: 15px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .container *,
+        .container-fluid * {
+            box-sizing: border-box;
+        }
+        
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+            /* Container设置了padding，所以Row需要设置-margin让Row占满Container的宽度 */
+        }
+        
+        .row:after {
+            /* float会引起父元素的高度塌陷，所以要使用一些clearfix技巧来清除浮动 */
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        [class*='col-'] {
+            float: left;
+            min-height: 1px;
+            padding: 15px;
+            /* Gutter的设置 同时和前面Container设置的一样，所以Column里面可以直接嵌套Row，而不需要Container */
+            border: 1px solid #F6A1A1;
+            background-color: #FFDCDC;
+        }
+        
+        .col-xs-1 {
+            width: 8.33333%;
+        }
+        
+        .col-xs-2 {
+            width: 16.66667%;
+        }
+        
+        .col-xs-3 {
+            width: 25%;
+        }
+        
+        .col-xs-4 {
+            width: 33.33333%;
+        }
+        
+        .col-xs-5 {
+            width: 41.66667%;
+        }
+        
+        .col-xs-6 {
+            width: 50%;
+        }
+        
+        .col-xs-7 {
+            width: 58.33333%;
+        }
+        
+        .col-xs-8 {
+            width: 66.66667%;
+        }
+        
+        .col-xs-9 {
+            width: 75%;
+        }
+        
+        .col-xs-10 {
+            width: 83.33333%;
+        }
+        
+        .col-xs-11 {
+            width: 91.66667%;
+        }
+        
+        .col-xs-12 {
+            width: 100%;
+        }
+        
+        .item {
+            background: #F6A1A1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class='container'>
+        <div class='row'>
+            <div class='col-xs-4'>
+                <div class='item'>col-xs-4</div>
+            </div>
+            <div class='col-xs-4'>
+                <div class='item'>col-xs-4</div>
+            </div>
+            <div class='col-xs-4'>
+                <div class='item'>col-xs-4</div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-xs-3'>
+                <div class='item'>col-xs-3</div>
+            </div>
+            <div class='col-xs-6'>
+                <div class='item'>col-xs-6</div>
+            </div>
+            <div class='col-xs-3'>
+                <div class='item'>col-xs-3</div>
+            </div>
+        </div>
+        <div class='row'>
+            <div class='col-xs-1'>
+                <div class='row'>
+                    <div class='col-xs-12'>
+                        <div class='item'>col-xs-10</div>
+                    </div>
+                </div>
+            </div>
+            <div class='col-xs-1'>
+                <div class='item'>col-xs-1</div>
+            </div>
+            <div class='col-xs-2'>
+                <div class='item'>col-xs-2</div>
+            </div>
+            <div class='col-xs-2'>
+                <div class='item'>col-xs-2</div>
+            </div>
+            <div class='col-xs-6'>
+                <div class='item'>col-xs-6</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

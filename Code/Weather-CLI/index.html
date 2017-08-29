@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <input class="input" type="text">
+        <div class="weather"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+    <script>
+        var defaultCity = defaultCity()
+
+        function defaultCity() {
+            var res = ''
+            $.ajax({
+                url: 'http://jirenguapi.applinzi.com/city.php',
+                method: 'get',
+                async: false //ajax是异步的 所以外面需要ajax里面的变量十需要改成同步执行，或者用回调在外面去取到这个数据，总之就是需要改成同步执行
+            }).done(function(response) {
+                res = response.slice(0, response.length - 1)
+            }).fail(function() {
+                console.log('获取数据失败')
+            })
+            return res
+        }
+
+        getWeather(defaultCity)
+        $('.input').on('keyup', function(e) {
+            if (e.keyCode === 13) {
+                var city = $(this).val()
+                getWeather(city)
+            }
+        })
+
+        function getWeather(city) {
+            $.ajax({
+                url: 'http://jirenguapi.applinzi.com/weather.php?city=' + city,
+                method: 'get'
+            }).done(
+                function(response) {
+                    response = JSON.parse(response)
+                    if (response.error === 0) {
+                        weatherHtml(response)
+                    } else {
+                        alert('没有这个城市')
+                    }
+                }
+            ).fail(function() {
+                alert('您与地球失联')
+            })
+        }
+
+        function weatherHtml(response) {
+            var str = ''
+            str = '<span class="city">' + response.results[0].currentCity + '</span>的天气情况是:<span class="weather">' + response.results[0].weather_data[0].temperature + '</span>'
+            $('.weather').html(str)
+        }
+    </script>
+</body>
+
+</html>

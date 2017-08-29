@@ -1,0 +1,22 @@
+{
+    "name": "tail-weather",
+    "version": "2.0.0",
+    "description": "npm tool weather",
+    "main": "index.js",
+    "bin": {
+        "weather": "./index.js"
+    },
+    "scripts": {
+        "weather": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [
+        "weather",
+        "tool"
+    ],
+    "author": "tail",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^0.16.2"
+    }
+}

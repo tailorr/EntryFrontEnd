@@ -1,0 +1,148 @@
+.toast {
+  position: fixed;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: 20px;
+  color: #D15A39;
+  padding: 5px 10px;
+  display: none; }
+html,
+body {
+  margin: 0;
+  height: 100%; }
+
+ul,
+li {
+  margin: 0;
+  padding: 0;
+  list-style: none; }
+
+body {
+  font: 18px/1.4 'Arial'; }
+
+a {
+  text-decoration: none;
+  color: #3b3b3b; }
+
+#header {
+  height: 50px;
+  font-size: 18px;
+  background: #fafafa;
+  border-bottom: 1px solid #ccc; }
+  #header a {
+    display: block;
+    line-height: 50px; }
+  #header .user-area {
+    padding-right: 16px;
+    float: right; }
+    #header .user-area li {
+      float: left;
+      margin-left: 5px; }
+      #header .user-area li span {
+        color: #fff;
+        display: block;
+        margin-top: 6px; }
+    #header .user-area img {
+      height: 18px;
+      margin-top: 5px;
+      border-radius: 50%; }
+  #header .setting {
+    float: right;
+    margin-left: 9px;
+    display: none; }
+  #header .add-note {
+    float: left;
+    margin-left: 16px;
+    padding: 2px 4px; }
+  #header .login {
+    float: right;
+    margin-left: 16px; }
+
+#content {
+  position: relative;
+  height: calc(100% - 51px);
+  margin: 0 auto; }
+
+@-webkit-keyframes move-twink-back {
+  from {
+    background-position: 0 0; }
+  to {
+    background-position: -10000px 5000px; } }
+
+@keyframes move-twink-back {
+  from {
+    background-position: 0 0; }
+  to {
+    background-position: -10000px 5000px; } }
+
+.stars,
+.twinkling {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block; }
+
+.stars {
+  z-index: -2; }
+@font-face {
+  font-family: 'close';
+  /* project id 397710 */
+  src: url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot");
+  src: url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.woff") format("woff"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.ttf") format("truetype"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.svg#iconfont") format("svg"); }
+
+.note {
+  position: absolute;
+  margin: 20px;
+  width: 200px;
+  box-sizing: border-box;
+  transition: all 1s;
+  background: #fff;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); }
+  .note .note-header {
+    height: 30px;
+    background: #fafafa; }
+    .note .note-header .delete {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      font-family: "close" !important;
+      font-size: 16px;
+      font-style: normal;
+      transition: -webkit-transform .5s;
+      transition: transform .5s;
+      transition: transform .5s, -webkit-transform .5s;
+      cursor: pointer; }
+      .note .note-header .delete:hover {
+        -webkit-transform: rotateZ(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotateZ(90deg);
+        color: #fff; }
+  .note .note-content {
+    padding: 20px;
+    min-height: 40px;
+    line-height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    text-decoration: underline;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc; }
+  .note .note-footer .save {
+    float: right;
+    width: 50%;
+    height: 30px;
+    border: none;
+    background: none; }
+    .note .note-footer .save:hover {
+      background: #ccc; }
+  .note .note-footer:after {
+    content: "";
+    display: table;
+    clear: both; }
+
+/*# sourceMappingURL=index.css.map*/

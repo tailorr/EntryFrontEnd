@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>懒加载例子</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .images {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .image-wrapper {
+            margin: 10px;
+            width: 350px;
+            height: 200px;
+            background: #111;
+        }
+        
+        .image-wrapper>img {
+            vertical-align: top;
+            /*图片baseline*/
+        }
+    </style>
+</head>
+
+<body>
+    <div class="images">
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-1" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-2" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-3" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-4" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-5" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-6" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-7" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-8" alt=""></div>
+        <div class="image-wrapper"><img src="http://via.placeholder.com/350x200?text=Jirengu-9" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-10" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-11" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-12" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-13" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-14" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-15" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-16" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-17" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-18" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-19" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-20" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-21" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-22" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-23" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-24" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-25" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-26" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-27" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-28" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-29" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-30" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-31" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-32" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-33" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-34" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-35" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-36" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-37" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-38" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-39" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-40" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-41" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-42" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-43" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-44" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-45" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-46" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-47" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-48" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-49" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-50" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-51" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-52" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-53" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-54" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-55" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-56" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-57" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-58" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-59" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-60" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-61" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-62" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-63" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-64" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-65" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-66" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-67" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-68" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-69" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-70" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-71" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-72" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-73" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-74" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-75" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-76" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-77" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-78" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-79" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-80" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-81" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-82" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-83" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-84" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-85" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-86" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-87" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-88" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-89" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-90" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-91" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-92" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-93" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-94" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-95" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-96" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-97" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-98" alt=""></div>
+        <div class="image-wrapper"><img data-src="http://via.placeholder.com/350x200?text=Jirengu-99" alt=""></div>
+    </div>
+
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="index.js"></script>
+</body>
+
+</html>

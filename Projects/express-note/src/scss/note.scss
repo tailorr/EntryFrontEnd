@@ -1,0 +1,61 @@
+@font-face {
+    font-family: 'close';
+    /* project id 397710 */
+    src: url('//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot');
+    src: url('//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.woff') format('woff'), url('//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.ttf') format('truetype'), url('//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.svg#iconfont') format('svg');
+}
+
+.note {
+    position: absolute;
+    margin: 20px;
+    width: 200px;
+    box-sizing: border-box;
+    transition: all 1s;
+    background: #fff;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+    .note-header {
+        height: 30px;
+        background: #fafafa;
+        .delete {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            font-family: "close" !important;
+            font-size: 16px;
+            font-style: normal;
+            transition: transform .5s;
+            cursor: pointer;
+            &:hover {
+                transform: rotateZ(90deg);
+                color: #fff;
+            }
+        }
+    }
+    .note-content {
+        padding: 20px;
+        min-height: 40px;
+        line-height: 30px;
+        background: rgba(255, 255, 255, 0.3);
+        color: #fff;
+        text-decoration: underline;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+    .note-footer {
+        .save {
+            float: right;
+            width: 50%;
+            height: 30px;
+            border: none;
+            background: none;
+            &:hover {
+                background: #ccc;
+            }
+        }
+        &:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    }
+}

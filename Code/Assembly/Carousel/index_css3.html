@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        li {
+            list-style: none;
+        }
+        
+        a {
+            text-decoration: none;
+            display: block;
+        }
+        
+        .carousel {
+            position: relative;
+            top: 40px;
+            margin: 0 auto;
+            width: 669px;
+            overflow: hidden;
+        }
+        
+        .img-wrap {
+            display: flex;
+            transition: transform 1s
+        }
+        
+        .img-wrap img {
+            vertical-align: top;
+        }
+        
+        .pre,
+        .next {
+            position: absolute;
+            z-index: 10;
+            top: 50%;
+            margin-top: -25px;
+            width: 50px;
+            line-height: 50px;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            opacity: 0.7;
+            transition: opacity .1s;
+        }
+        
+        @font-face {
+            font-family: "iconfont";
+            src: url('iconfont.eot?t=1499834345762');
+            /* IE9*/
+            src: url('./iconfont/iconfont.eot?t=1499834345762#iefix') format('embedded-opentype'), /* IE6-IE8 */
+            url('./iconfont/iconfont.woff?t=1499834345762') format('woff'), /* chrome, firefox */
+            url('./iconfont/iconfont.ttf?t=1499834345762') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+            url('./iconfont/iconfont.svg?t=1499834345762#iconfont') format('svg');
+            /* iOS 4.1- */
+        }
+        
+        .iconfont {
+            font-family: "iconfont" !important;
+            color: #fff;
+            text-align: center;
+            font-size: 30px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .pre:before {
+            content: "\e602";
+        }
+        
+        .next:before {
+            content: "\e601";
+        }
+        
+        .pre:hover,
+        .next:hover {
+            opacity: 1;
+        }
+        
+        .pre {
+            left: 10px;
+        }
+        
+        .next {
+            right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="carousel">
+        <ul class="img-wrap">
+            <li>
+                <a href="#"><img src="./img/1.png" alt=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="./img/2.png" alt=""></a>
+            </li>
+            <li>
+                <a href="#"><img src="./img/3.png" alt=""></a>
+            </li>
+        </ul>
+        <a class="pre iconfont" href="#"></a>
+        <a class="next iconfont" href="#"></a>
+        <ul class="focus-dots">
+            <li></li>
+            <li></li>
+            <li class="active"></li>
+        </ul>
+    </div>
+    <script src="./bower_components/jquery/dist/jquery.min.js"></script>
+    <script>
+        var $carousel = $('.carousel')
+        var $imgWrap = $('.img-wrap')
+        var $images = $('.img-wrap>li')
+        var $preBtn = $('.pre')
+        var $nextBtn = $('.next')
+        var $imgWidth = $images.eq(0).width()
+
+        //初始化
+        $images.first().clone().appendTo($('.img-wrap'))
+        $images.last().clone().prependTo($('.img-wrap'))
+        $imgWrap.css({
+            "transform": "translateX(" + -$imgWidth + "px)"
+        })
+
+        // autoPlay()
+
+        // $carousel.on('mouseenter', pausePlay)
+        // $carousel.on('mouseleave', autoPlay)
+
+        $nextBtn.on('click', playNext)
+            // $preBtn.on('click', playPre)
+
+
+        var index = 1
+
+        function playNext() {
+            index++
+
+            if (index === $images.length) {
+                index = 0
+                $imgWrap.css({
+                    "transition": "none"
+                })
+            }
+            $imgWrap.css({
+                "transform": "translateX(" + -index * $imgWidth + "px)",
+            })
+            console.log(-index * $imgWidth, $images.length)
+        }
+
+        // function playPre() {
+        //     index--
+        //     if (index < 0) {
+        //         index = $images.length - 1
+        //     }
+        //     $imgWrap.css({
+        //         "transform": "translateX(" + -index * $imgWidth + "px)"
+        //     })
+        // }
+
+        // function autoPlay() {
+        //     timerId = setInterval(playNext, 2000)
+        // }
+
+        // function pausePlay() {
+        //     clearInterval(timerId)
+        // }
+    </script>
+</body>
+
+</html>

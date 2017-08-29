@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    .barrel-img {
+      margin: 0 auto;
+      width: 1280px;
+    }
+
+    .row:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+
+    .row {
+      margin-bottom: 10px;
+    }
+
+    .row .img-wrapper {
+      margin-right: 10px;
+      float: left;
+    }
+
+    .img-wrapper img {
+      vertical-align: top;
+    }
+
+    .container {
+      width: 1000px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="barrel-img">
+
+  </div>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script>
+    let BarrelCenter = (function() {
+
+      function init($ct, handler) {
+        $ct.each(function() {
+          if ($(this).hasClass('init')) {
+            return
+          }
+          new Barrel($(this), handler)
+          $(this).addClass('init')
+        })
+      }
+
+      function Barrel($ct, handler) {
+        this.$ct = $ct
+        this.marginRight = 10 //图片间距设置
+        this.rowList = [] //存放每一行放的图片宽高等信息
+        this.handler = handler
+        this._loadImg()
+        this._bindEvent()
+        handler && handler()
+      }
+
+      Barrel.prototype = {
+        _loadImg: function() {
+          let _this = this
+          let imgUrls = this._getImageUrls(15) //获取图片地址
+          $.each(imgUrls, function(index, url) {
+            let img = new Image()
+            $(img).attr('src',url)
+            $(img).attr('data-src',url)
+
+            img.onload = function() { //记录每张图片加载后的信息
+              let imgInfo = {
+                target: img,
+                width: 200 * (img.width / img.height),
+                height: 200
+              }
+              // console.log(imgInfo)
+              _this._render(imgInfo) //渲染图片
+            }
+          })
+        },
+        _render: function(imgInfo) { //判断每行需要加载的图片数量&计算每行的高度
+          let _this = this,
+              ctWidth = this.$ct.width(),
+              rowWidth = 0,
+              rowHeight = 0,
+              imagesWidth = 0,
+              lastImgInfo = imgInfo
+          this.rowList.push(imgInfo)
+          $.each(this.rowList, function(index, imgInfoItem) {
+            imagesWidth += imgInfoItem.width
+            rowWidth += (imgInfoItem.width + _this.marginRight)
+          })
+          if (rowWidth > ctWidth) {
+            this.rowList.pop()
+            rowHeight = imgInfo.height * (ctWidth / (imagesWidth - imgInfo.width + (this.rowList.length - 1) * this.marginRight))
+            this._layout(rowHeight)
+            this.rowList = []
+            this.rowList.push(imgInfo)
+          }
+        },
+        _layout: function(rowHeight) { // 创建DOM
+          let _this = this
+          let $row = $('<div class="row"></div>')
+          $.each(this.rowList, function(index, imgInfo) {
+            let $imgWrapper = $('<div class="img-wrapper"></div>')
+            if (index === _this.rowList.length - 1) {
+              $imgWrapper.css('marginRight', 0)
+            }
+            $img = $(imgInfo.target)
+            $img.height(rowHeight)
+            $imgWrapper.append($img)
+            $row.append($imgWrapper)
+          })
+          this.$ct.append($row)
+        },
+        _getImageUrls: function(perNumber) { //获取图片资源
+          let width, height, urls = []
+          for (let i = 0; i < perNumber; i++) {
+            width = Math.floor(Math.random() * 100 + 200)
+            height = Math.floor(Math.random() * 100 + 100)
+            urls.push('https://fakeimg.pl/' + width + 'x' + height)
+          }
+          return urls
+        },
+        _bindEvent: function() {
+          let _this = this
+          $(window).on('scroll', function() {
+            console.log(_this._isBottom())
+            if (_this._isBottom()) {
+              _this._loadImg()
+                console.log("底部到了")
+            }
+            _this.handler && _this.handler()
+          })
+        },
+        _isBottom: function() {
+          let $documentHeight = $(document).height(),
+            $clientHeight = $(window).height(),
+            $scrollTop = $(window).scrollTop()
+          if (Math.ceil($scrollTop + $clientHeight) >= $documentHeight) {
+            return true
+          } else {
+            return false
+          }
+        },
+      }
+
+      return {
+        init: init
+      }
+    })()
+
+    // let Exposure = (function() {
+    //   function init($ct, handler) {
+    //     $ct.each(function() {
+    //       if ($(this).hasClass('init')) {
+    //         return
+    //       }
+    //     })
+    //     new Lazy($ct)
+    //     $(this).addClass('init')
+    //   }
+    //
+    //   function Lazy($ct, handler) {
+    //     this.$ct = $ct
+    //     this.handler = handler
+    //     this._load()
+    //     handler && handler()
+    //   }
+    //   Lazy.prototype = {
+    //     _load: function() {
+    //       var _this = this
+    //       var $images = this.$ct.find('img')
+    //       // console.log($images)
+    //       $.each($images, function(a, b) {
+    //         // console.log(a, b)
+    //         if (_this._isVisible($(this))) {
+    //           $(this).attr('src', $(this).attr('data-src'))
+    //         }
+    //       })
+    //     },
+    //     _isVisible: function($element) {
+    //       let $elementHeight = $element.height(),
+    //         $clientHeight = $(window).height(),
+    //         $elementOffsetTop = $element.offset().top,
+    //         $scrollTop = $(window).scrollTop()
+    //       if ($scrollTop + $clientHeight > $elementOffsetTop && $scrollTop < $elementHeight + $elementOffsetTop) {
+    //         return true
+    //       } else {
+    //         return false
+    //       }
+    //     }
+    //   }
+    //
+    //   return {
+    //     init: init
+    //   }
+    // })()
+    BarrelCenter.init($('.barrel-img'))
+  </script>
+</body>
+
+</html>
