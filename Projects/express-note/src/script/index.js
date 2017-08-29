@@ -13,5 +13,5 @@ $('.add-note').on('click', function() {
     NoteManager.add()
 })
 Event.on('waterfall', function() {
-    WaterFall.init($('#content'))
+    WaterFall.init($('#container .content'))
 })

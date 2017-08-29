@@ -10476,7 +10476,7 @@ var Note = function () {
             value: function _createNote() {
                 var tpl = '<div class="note">\n                            <div class="note-header">\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <button class="save">Save</button>\n                            </div>\n                       </div>';
                 this.$note = $(tpl);
-                $('#content').append(this.$note);
+                $('#container .content').append(this.$note);
                 this._initLayout();
                 if (!this.id) {
                     this.$mask = Mask.init();
@@ -10491,7 +10491,7 @@ var Note = function () {
                     "position": "absolute",
                     "top": "50%",
                     "left": "50%",
-                    "transform": "translate(calc(-50% - 20px), calc(-50% - 20px))",
+                    "transform": "translate(calc(-50% - 125px), calc(-50% + 200px))",
                     "z-index": "1000"
                 });
             }
@@ -10527,20 +10527,20 @@ var Note = function () {
                     _this.$mask && _this.$mask.remove();
                     _this.$mask = null;
                     _this._fulfilLayout();
+                    console.log(_this);
                     if (_this.id) {
                         _this._edit($note.html());
                     } else {
                         _this._add($note.html());
                     }
+                    console.log(_this);
                 });
 
                 //增加、修改
                 $note.on('focus', function () {
                     if ($note.text() === 'Input your note here') $note.html('');
                     $note.data('before', $note.html());
-
                     _this.$mask = _this.$mask ? _this.$mask : Mask.init();
-
                     _this._initLayout();
                 }).on('blur paste', function () {
                     if (!_this.id) return;
@@ -10723,7 +10723,7 @@ $('.add-note').on('click', function () {
     NoteManager.add();
 });
 Event.on('waterfall', function () {
-    WaterFall.init($('#content'));
+    WaterFall.init($('#container .content'));
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 

@@ -34,7 +34,7 @@ let Note = (() => {
                             </div>
                        </div>`
             this.$note = $(tpl)
-            $('#content').append(this.$note)
+            $('#container .content').append(this.$note)
             this._initLayout()
             if (!this.id) {
                 this.$mask = Mask.init()
@@ -47,7 +47,7 @@ let Note = (() => {
                 "position": "absolute",
                 "top": "50%",
                 "left": "50%",
-                "transform": "translate(calc(-50% - 20px), calc(-50% - 20px))",
+                "transform": "translate(calc(-50% - 125px), calc(-50% + 200px))",
                 "z-index": "1000"
             })
         }
@@ -77,11 +77,13 @@ let Note = (() => {
                 this.$mask && this.$mask.remove()
                 this.$mask = null
                 this._fulfilLayout()
+                console.log(this)
                 if (this.id) {
                     this._edit($note.html())
                 } else {
                     this._add($note.html())
                 }
+                console.log(this)
             })
 
 
@@ -89,9 +91,7 @@ let Note = (() => {
             $note.on('focus', () => {
                 if ($note.text() === 'Input your note here') $note.html('')
                 $note.data('before', $note.html())
-
                 this.$mask = this.$mask ? this.$mask : Mask.init()
-
                 this._initLayout()
             }).on('blur paste', () => {
                 if (!this.id) return

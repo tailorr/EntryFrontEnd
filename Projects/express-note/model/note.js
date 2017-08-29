@@ -25,21 +25,21 @@ const Note = sequelize.define('note', {
     }
 })
 
-Note.sync({ force: true })
-    // {force: true} will drop the table if it already exists
-    // Note.sync().then(() => {
-    // Table created
-    //     return Note.create({
-    //         text: 'hello'
-    //     });
-    // }).then(function() {
-    //     Note.findAll({ raw: true }).then(function(notes) {
-    //         console.log(notes)
-    //     })
-    // })
-
-// Note.findAll({ raw: true }).then(function(note) {
-//     console.log(note)
+// Note.sync({ force: true })
+// {force: true} will drop the table if it already exists
+// Note.sync().then(() => {
+// Table created
+//     return Note.create({
+//         text: 'hello'
+//     });
+// }).then(function() {
+//     Note.findAll({ raw: true }).then(function(notes) {
+//         console.log(notes)
+//     })
 // })
+
+Note.findAll({ raw: true }).then(function(note) {
+    console.log(note)
+})
 
 module.exports = Note
