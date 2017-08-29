@@ -8,6 +8,7 @@ let Mask = (() => {
             this.$mask = $(tpl)
             $('body').append(this.$mask)
             this._setStyle()
+            this.$mask.fadeIn(500)
         }
         _setStyle() {
             this.$mask.css({
@@ -18,11 +19,13 @@ let Mask = (() => {
                 "right": 0,
                 "width": "100 %",
                 "height": "100 %",
-                "background": "rgba(0,0,0,0.5)"
+                "display": "none",
+                "background": "rgba(0,0,0,0.8)",
+                "z-index": 999
             })
         }
         remove() {
-            this.$mask.fadeOut(1000, () => {
+            this.$mask.fadeOut(500, () => {
                 this.$mask.remove()
             })
         }

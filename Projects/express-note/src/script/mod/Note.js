@@ -32,11 +32,9 @@ let Note = (() => {
                             <div class="note-footer">
                                 <button class="save">Save</button>
                             </div>
-                            
                        </div>`
             this.$note = $(tpl)
             $('#content').append(this.$note)
-
             this._initLayout()
             if (!this.id) {
                 this.$mask = Mask.init()
@@ -49,63 +47,72 @@ let Note = (() => {
                 "position": "absolute",
                 "top": "50%",
                 "left": "50%",
-                "transform": "translate(-50%, -50%)",
-                "z-index": "999"
+                "transform": "translate(calc(-50% - 20px), calc(-50% - 20px))",
+                "z-index": "1000"
             })
-
         }
         _fulfilLayout() {
             Event.fire('waterfall');
         }
         _bindEvent() {
-                let $note = this.$note.find('.note-content')
-                let $delete = this.$note.find('.delete')
-                let $save = this.$note.find('.save')
-                let $cancel = this.$note.find('.cancel')
+            let $note = this.$note.find('.note-content')
+            let $delete = this.$note.find('.delete')
+            let $save = this.$note.find('.save')
 
-                //删除
-                $delete.on('click', () => {
-                    this._delete()
-                    this.$mask && this.$mask.remove()
+            //删除
+            $delete.on('click', () => {
+                this._delete()
+                this.$mask && this.$mask.remove()
+                this.$mask = null
+
+                this._fulfilLayout()
+            })
+
+            // 保存
+            $save.on('click', () => {
+                if ($note.text() === 'Input your note here' || $note.text() === '') {
+                    Toast.init("Please Enter Your Note")
+                    return
+                }
+                this.$mask && this.$mask.remove()
+                this.$mask = null
+                this._fulfilLayout()
+                if (this.id) {
+                    this._edit($note.html())
+                } else {
+                    this._add($note.html())
+                }
+            })
+
+
+            //增加、修改
+            $note.on('focus', () => {
+                if ($note.text() === 'Input your note here') $note.html('')
+                $note.data('before', $note.html())
+
+                this.$mask = this.$mask ? this.$mask : Mask.init()
+
+                this._initLayout()
+            }).on('blur paste', () => {
+                if (!this.id) return
+                if ($note.data('before') != $note.html()) {
+                    $note.data('before', $note.html())
                     this._fulfilLayout()
-                })
-                $cancel.on('click', () => {
-                    this._delete()
                     this.$mask && this.$mask.remove()
-                    this._fulfilLayout()
-                })
-                $save.on('click', () => {
-                    this.$mask && this.$mask.remove()
-                    if ($note.text() === 'Input your note here' || $note.text() === '') {
-                        this.$note.remove()
-                        Toast.init("Please Enter Your Note")
-                    }
-                    this._fulfilLayout()
+                    this.$mask = null
                     if (this.id) {
                         this._edit($note.html())
                     } else {
                         this._add($note.html())
                     }
-                })
+                }
+            });
+        }
 
-                //增加、修改
-                $note.on('focus', () => {
-                    if ($note.text() === 'Input your note here') $note.html('')
-                    $note.data('before', $note.html())
-                }).on('blur paste', () => {
-                    if (!this.id) return
-                    if ($note.data('before') != $note.html()) {
-                        $note.data('before', $note.html())
-                        this._fulfilLayout()
-                        if (this.id) {
-                            this._edit($note.html())
-                        } else {
-                            this._add($note.html())
-                        }
-                    }
-                });
-            }
-            //存储到数据库
+
+
+        /* ---------------------------以下是数据库的相关操作----------------------------- */
+        //存储到数据库
         _add(msg) {
             $.post('/api/notes/add', { note: msg }).then(res => {
                 if (res.status === 0) {

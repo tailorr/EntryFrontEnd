@@ -1,13 +1,61 @@
-.toast {
-  position: fixed;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
-  bottom: 20px;
-  color: #D15A39;
-  padding: 5px 10px;
-  display: none; }
+@font-face {
+  font-family: 'close';
+  /* project id 397710 */
+  src: url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot");
+  src: url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.woff") format("woff"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.ttf") format("truetype"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.svg#iconfont") format("svg"); }
+
+.note {
+  position: absolute;
+  margin: 20px;
+  width: 200px;
+  box-sizing: border-box;
+  transition: all 1s;
+  background: #fff;
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 3px 5px rgba(0, 0, 0, 0.1); }
+  .note .note-header {
+    height: 30px;
+    background: #fafafa; }
+    .note .note-header .delete {
+      position: absolute;
+      right: 7px;
+      top: 7px;
+      font-family: "close" !important;
+      font-size: 12px;
+      font-style: normal;
+      color: #D5D5D5;
+      transition: -webkit-transform .8s;
+      transition: transform .8s;
+      transition: transform .8s, -webkit-transform .8s;
+      cursor: pointer; }
+      .note .note-header .delete:hover {
+        -webkit-transform: rotateZ(90deg);
+        -ms-transform: rotate(90deg);
+        transform: rotateZ(90deg);
+        color: #3b3b3b; }
+  .note .note-content {
+    padding: 20px;
+    min-height: 40px;
+    line-height: 30px;
+    background: rgba(255, 255, 255, 0.3);
+    border-top: 1px solid #EBEDF1;
+    border-bottom: 1px solid #EBEDF1;
+    color: #7D8490;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-modify: read-write-plaintext-only;
+    outline: 0; }
+  .note .note-footer button {
+    float: right;
+    width: 50%;
+    height: 30px;
+    border: none;
+    background: none;
+    color: #7D8490; }
+    .note .note-footer button:hover {
+      background: #e9e9e9; }
+  .note .note-footer:after {
+    content: "";
+    display: table;
+    clear: both; }
 html,
 body {
   margin: 0;
@@ -30,7 +78,23 @@ a {
   height: 50px;
   font-size: 18px;
   background: #fafafa;
-  border-bottom: 1px solid #ccc; }
+  border-bottom: 1px solid #EBEDF1; }
+  #header:after {
+    content: "";
+    display: block;
+    clear: both; }
+  #header .header {
+    position: relative;
+    width: 1200px;
+    margin: 0 auto; }
+    #header .header .logo {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 200px;
+      background: #fff;
+      box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3); }
   #header a {
     display: block;
     line-height: 50px; }
@@ -54,16 +118,33 @@ a {
     display: none; }
   #header .add-note {
     float: left;
-    margin-left: 16px;
-    padding: 2px 4px; }
+    padding-left: 20px;
+    padding-right: 20px; }
+    #header .add-note:hover {
+      background: #e9e9e9; }
   #header .login {
     float: right;
     margin-left: 16px; }
+    #header .login:hover {
+      color: #777777; }
 
 #content {
   position: relative;
+  width: 1200px;
   height: calc(100% - 51px);
   margin: 0 auto; }
+
+@media (max-width: 1200px) {
+  #content {
+    width: 960px; } }
+
+@media (max-width: 960px) {
+  #content {
+    width: 720px; } }
+
+@media (max-width: 720px) {
+  #content {
+    width: 480px; } }
 
 @-webkit-keyframes move-twink-back {
   from {
@@ -77,8 +158,7 @@ a {
   to {
     background-position: -10000px 5000px; } }
 
-.stars,
-.twinkling {
+.stars {
   position: absolute;
   top: 0;
   left: 0;
@@ -90,59 +170,16 @@ a {
 
 .stars {
   z-index: -2; }
-@font-face {
-  font-family: 'close';
-  /* project id 397710 */
-  src: url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot");
-  src: url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.woff") format("woff"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.ttf") format("truetype"), url("//at.alicdn.com/t/font_397710_3garifo2lpxskyb9.svg#iconfont") format("svg"); }
-
-.note {
-  position: absolute;
-  margin: 20px;
-  width: 200px;
-  box-sizing: border-box;
-  transition: all 1s;
-  background: #fff;
-  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1); }
-  .note .note-header {
-    height: 30px;
-    background: #fafafa; }
-    .note .note-header .delete {
-      position: absolute;
-      right: 5px;
-      top: 5px;
-      font-family: "close" !important;
-      font-size: 16px;
-      font-style: normal;
-      transition: -webkit-transform .5s;
-      transition: transform .5s;
-      transition: transform .5s, -webkit-transform .5s;
-      cursor: pointer; }
-      .note .note-header .delete:hover {
-        -webkit-transform: rotateZ(90deg);
-        -ms-transform: rotate(90deg);
-        transform: rotateZ(90deg);
-        color: #fff; }
-  .note .note-content {
-    padding: 20px;
-    min-height: 40px;
-    line-height: 30px;
-    background: rgba(255, 255, 255, 0.3);
-    color: #fff;
-    text-decoration: underline;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc; }
-  .note .note-footer .save {
-    float: right;
-    width: 50%;
-    height: 30px;
-    border: none;
-    background: none; }
-    .note .note-footer .save:hover {
-      background: #ccc; }
-  .note .note-footer:after {
-    content: "";
-    display: table;
-    clear: both; }
+.toast {
+  position: fixed;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  bottom: 20px;
+  color: #D15A39;
+  padding: 5px 10px;
+  display: none;
+  z-index: 1001; }
 
 /*# sourceMappingURL=index.css.map*/

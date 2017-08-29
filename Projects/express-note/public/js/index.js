@@ -10474,10 +10474,9 @@ var Note = function () {
         }, {
             key: '_createNote',
             value: function _createNote() {
-                var tpl = '<div class="note">\n                            <div class="note-header">\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <button class="save">Save</button>\n                            </div>\n                            \n                       </div>';
+                var tpl = '<div class="note">\n                            <div class="note-header">\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <button class="save">Save</button>\n                            </div>\n                       </div>';
                 this.$note = $(tpl);
                 $('#content').append(this.$note);
-
                 this._initLayout();
                 if (!this.id) {
                     this.$mask = Mask.init();
@@ -10492,8 +10491,8 @@ var Note = function () {
                     "position": "absolute",
                     "top": "50%",
                     "left": "50%",
-                    "transform": "translate(-50%, -50%)",
-                    "z-index": "999"
+                    "transform": "translate(calc(-50% - 20px), calc(-50% - 20px))",
+                    "z-index": "1000"
                 });
             }
         }, {
@@ -10509,25 +10508,24 @@ var Note = function () {
                 var $note = this.$note.find('.note-content');
                 var $delete = this.$note.find('.delete');
                 var $save = this.$note.find('.save');
-                var $cancel = this.$note.find('.cancel');
 
                 //删除
                 $delete.on('click', function () {
                     _this._delete();
                     _this.$mask && _this.$mask.remove();
+                    _this.$mask = null;
+
                     _this._fulfilLayout();
                 });
-                $cancel.on('click', function () {
-                    _this._delete();
-                    _this.$mask && _this.$mask.remove();
-                    _this._fulfilLayout();
-                });
+
+                // 保存
                 $save.on('click', function () {
-                    _this.$mask && _this.$mask.remove();
                     if ($note.text() === 'Input your note here' || $note.text() === '') {
-                        _this.$note.remove();
                         Toast.init("Please Enter Your Note");
+                        return;
                     }
+                    _this.$mask && _this.$mask.remove();
+                    _this.$mask = null;
                     _this._fulfilLayout();
                     if (_this.id) {
                         _this._edit($note.html());
@@ -10540,11 +10538,17 @@ var Note = function () {
                 $note.on('focus', function () {
                     if ($note.text() === 'Input your note here') $note.html('');
                     $note.data('before', $note.html());
+
+                    _this.$mask = _this.$mask ? _this.$mask : Mask.init();
+
+                    _this._initLayout();
                 }).on('blur paste', function () {
                     if (!_this.id) return;
                     if ($note.data('before') != $note.html()) {
                         $note.data('before', $note.html());
                         _this._fulfilLayout();
+                        _this.$mask && _this.$mask.remove();
+                        _this.$mask = null;
                         if (_this.id) {
                             _this._edit($note.html());
                         } else {
@@ -10553,6 +10557,8 @@ var Note = function () {
                     }
                 });
             }
+
+            /* ---------------------------以下是数据库的相关操作----------------------------- */
             //存储到数据库
 
         }, {
@@ -10666,7 +10672,8 @@ var Waterfall = function () {
                     $(element).css({
                         left: columnWidth * minIndex,
                         top: minHeight,
-                        transform: "translate(0,0)"
+                        transform: "translate(0,0)",
+                        "z-index": 0
                     });
                     columnHeight[minIndex] = $(element).outerHeight(true) + columnHeight[minIndex];
                 });
@@ -10764,6 +10771,7 @@ var Mask = function () {
                 this.$mask = $(tpl);
                 $('body').append(this.$mask);
                 this._setStyle();
+                this.$mask.fadeIn(500);
             }
         }, {
             key: "_setStyle",
@@ -10776,7 +10784,9 @@ var Mask = function () {
                     "right": 0,
                     "width": "100 %",
                     "height": "100 %",
-                    "background": "rgba(0,0,0,0.5)"
+                    "display": "none",
+                    "background": "rgba(0,0,0,0.8)",
+                    "z-index": 999
                 });
             }
         }, {
@@ -10784,7 +10794,7 @@ var Mask = function () {
             value: function remove() {
                 var _this = this;
 
-                this.$mask.fadeOut(1000, function () {
+                this.$mask.fadeOut(500, function () {
                     _this.$mask.remove();
                 });
             }

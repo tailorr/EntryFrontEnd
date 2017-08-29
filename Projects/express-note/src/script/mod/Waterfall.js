@@ -27,7 +27,8 @@ let Waterfall = (() => {
                 $(element).css({
                     left: columnWidth * minIndex,
                     top: minHeight,
-                    transform: "translate(0,0)"
+                    transform: "translate(0,0)",
+                    "z-index": 0
                 });
                 columnHeight[minIndex] = $(element).outerHeight(true) + columnHeight[minIndex];
             });

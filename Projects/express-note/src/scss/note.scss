@@ -12,22 +12,23 @@
     box-sizing: border-box;
     transition: all 1s;
     background: #fff;
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 3px 5px rgba(0, 0, 0, 0.1);
     .note-header {
         height: 30px;
         background: #fafafa;
         .delete {
             position: absolute;
-            right: 5px;
-            top: 5px;
+            right: 7px;
+            top: 7px;
             font-family: "close" !important;
-            font-size: 16px;
+            font-size: 12px;
             font-style: normal;
-            transition: transform .5s;
+            color: #D5D5D5;
+            transition: transform .8s;
             cursor: pointer;
             &:hover {
                 transform: rotateZ(90deg);
-                color: #fff;
+                color: #3b3b3b;
             }
         }
     }
@@ -36,20 +37,23 @@
         min-height: 40px;
         line-height: 30px;
         background: rgba(255, 255, 255, 0.3);
-        color: #fff;
-        text-decoration: underline;
-        border-top: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #EBEDF1;
+        border-bottom: 1px solid #EBEDF1;
+        color: #7D8490;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        -webkit-user-modify: read-write-plaintext-only;
+        outline: 0;
     }
     .note-footer {
-        .save {
+        button {
             float: right;
             width: 50%;
             height: 30px;
             border: none;
             background: none;
+            color: #7D8490;
             &:hover {
-                background: #ccc;
+                background: #e9e9e9;
             }
         }
         &:after {

@@ -20,7 +20,6 @@ router.get('/notes', (req, res, next) => {
 
 router.post('/notes/add', (req, res, next) => {
     Note.create({ text: req.body.note }).then((notes) => {
-        console.log(notes)
         res.send({ status: 0, data: notes })
     }).catch(() => {
         res.send({ status: 1, errorMsg: '数据库异常' })
