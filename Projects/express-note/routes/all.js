@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
         }
     }
     console.log(data)
+    data.title = 'Note'
     res.render('index', data);
 });
 

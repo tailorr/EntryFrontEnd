@@ -10836,7 +10836,7 @@ var NoteManager = function () {
                 });
                 Event.fire('waterfall');
             } else {
-                Toast.init(ret.errorMsg);
+                Toast.init(res.errorMsg);
             }
         }).catch(function () {
             Toast.init('网络异常');

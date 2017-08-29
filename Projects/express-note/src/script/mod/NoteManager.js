@@ -15,7 +15,7 @@ let NoteManager = (() => {
                     });
                     Event.fire('waterfall');
                 } else {
-                    Toast.init(ret.errorMsg);
+                    Toast.init(res.errorMsg);
                 }
             })
             .catch(() => {

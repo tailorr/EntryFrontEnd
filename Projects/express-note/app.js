@@ -4,9 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var passport = require('passport');
+
 
 var index = require('./routes/index');
 var api = require('./routes/api');
+var auth = require('./routes/auth');
+var all = require('./routes/all');
 
 var app = express();
 
@@ -21,9 +25,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', index); //我的便签
 app.use('/api', api); //ajax 接口
+app.use('/all', all); //全部便签
+app.use('/auth', auth); //登录
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

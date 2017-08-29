@@ -11,7 +11,11 @@ var Note = require('../model/note')
 
 
 router.get('/notes', (req, res, next) => {
-    Note.findAll({ raw: true }).then((notes) => {
+    var opts = { raw: true }
+    if (req.session && req.session.user) {
+        opts.where = { uid: req.session.user.id }
+    }
+    Note.findAll(opts).then((notes) => {
         res.send({ status: 0, data: notes });
     }).catch(() => {
         res.send({ status: 1, errorMsg: '数据库异常' });
@@ -19,15 +23,32 @@ router.get('/notes', (req, res, next) => {
 })
 
 router.post('/notes/add', (req, res, next) => {
-    Note.create({ text: req.body.note }).then((notes) => {
-        res.send({ status: 0, data: notes })
-    }).catch(() => {
-        res.send({ status: 1, errorMsg: '数据库异常' })
+    if (!req.session || !req.session.user) {
+        return res.send({ status: 1, errorMsg: '请先登录' })
+    }
+    if (!req.body.note) {
+        return res.send({ status: 2, errorMsg: '内容不能为空' });
+    }
+    var note = req.body.note;
+    var uid = req.session.user.id;
+    console.log({ text: note, uid: uid })
+    Note.create({ text: note, uid: uid }).then(() => {
+        console.log(arguments)
+        res.send({ status: 0 })
+    }).catch(function() {
+        res.send({ status: 1, errorMsg: '数据库异常或者你没有权限' });
     })
 })
 
 router.post('/notes/edit', (req, res, next) => {
-    Note.update({ text: req.body.note }, { where: { id: req.body.id } }).then(() => {
+    if (!req.session || !req.session.user) {
+        return res.send({ status: 1, errorMsg: '请先登录' })
+    }
+    var noteId = req.body.id;
+    var note = req.body.note;
+    var uid = req.session.user.id;
+
+    Note.update({ text: note }, { where: { id: noteId, uid: uid } }).then(() => {
         res.send({ status: 0 })
     }).catch(() => {
         res.send({ status: 1, errorMsg: '数据库异常' })
@@ -35,7 +56,14 @@ router.post('/notes/edit', (req, res, next) => {
 })
 
 router.post('/notes/delete', (req, res, next) => {
-    Note.destroy({ where: { id: req.body.id } }).then(() => {
+    if (!req.session || !req.session.user) {
+        return res.send({ status: 1, errorMsg: '请先登录' })
+    }
+
+    var noteId = req.body.id
+    var uid = req.session.user.id;
+
+    Note.destroy({ where: { id: noteId, uid: uid } }).then(() => {
         res.send({ status: 0 })
     }).catch(() => {
         res.send({ status: 1, errorMsg: '数据库异常' });
