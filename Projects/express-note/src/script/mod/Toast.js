@@ -1,4 +1,5 @@
 require('scss/toast.scss')
+
 let Toast = (() => {
     class _Toast {
         constructor(message = '添加成功', time = 1000) {
@@ -15,7 +16,7 @@ let Toast = (() => {
         showToast() {
             this.$toast.fadeIn(400, () => {
                 setTimeout(() => {
-                    this.$toast.fadeOut(400, () => {
+                    this.$toast.fadeOut(200, () => {
                         this.$toast.remove()
                     })
                 }, this.vanishTime)

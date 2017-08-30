@@ -10335,6 +10335,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 __webpack_require__(7);
+
 var Toast = function () {
     var _Toast = function () {
         function _Toast() {
@@ -10363,7 +10364,7 @@ var Toast = function () {
 
                 this.$toast.fadeIn(400, function () {
                     setTimeout(function () {
-                        _this.$toast.fadeOut(400, function () {
+                        _this.$toast.fadeOut(200, function () {
                             _this.$toast.remove();
                         });
                     }, _this.vanishTime);
@@ -10460,6 +10461,7 @@ var Note = function () {
                 initContext: 'Input your note here'
             };
             this._initOpts(opts);
+            console.log(this.opts);
             this._createNote();
             this._bindEvent();
         }
@@ -10476,13 +10478,14 @@ var Note = function () {
             value: function _createNote() {
                 var tpl = '<div class="note">\n                            <div class="note-header">\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <button class="save">Save</button>\n                            </div>\n                       </div>';
                 this.$note = $(tpl);
-                $('#container .content').append(this.$note);
+                $('#content').append(this.$note);
+
                 this._initLayout();
+
                 if (!this.id) {
                     this.$mask = Mask.init();
                     Toast.init('Create Sucess');
                 }
-                if (this.id) Toast.init('Welcome Back');
             }
         }, {
             key: '_initLayout',
@@ -10491,7 +10494,7 @@ var Note = function () {
                     "position": "absolute",
                     "top": "50%",
                     "left": "50%",
-                    "transform": "translate(calc(-50% - 125px), calc(-50% + 200px))",
+                    "transform": "translate(calc(-50% - 20px), calc(-50% - 70px))",
                     "z-index": "1000"
                 });
             }
@@ -10514,7 +10517,6 @@ var Note = function () {
                     _this._delete();
                     _this.$mask && _this.$mask.remove();
                     _this.$mask = null;
-
                     _this._fulfilLayout();
                 });
 
@@ -10524,16 +10526,16 @@ var Note = function () {
                         Toast.init("Please Enter Your Note");
                         return;
                     }
+                    console.log(_this.opts);
                     _this.$mask && _this.$mask.remove();
                     _this.$mask = null;
                     _this._fulfilLayout();
-                    console.log(_this);
+
                     if (_this.id) {
                         _this._edit($note.html());
                     } else {
                         _this._add($note.html());
                     }
-                    console.log(_this);
                 });
 
                 //增加、修改
@@ -10585,6 +10587,7 @@ var Note = function () {
                 var _this3 = this;
 
                 $.post('/api/notes/delete', { id: this.id }).then(function (res) {
+                    console.log(_this3.id);
                     if (res.status === 0) {
                         _this3.$note.remove();
                         Toast.init('Delete Success');
@@ -10596,15 +10599,19 @@ var Note = function () {
                     console.log('xxxxxxxxxxx');
                 });
             }
+
             // 修改数据库内容
 
         }, {
             key: '_edit',
             value: function _edit(msg) {
+                var _this4 = this;
+
                 $.post('/api/notes/edit', {
                     id: this.id,
                     note: msg
                 }).then(function (res) {
+                    console.log(_this4.id);
                     if (res.status === 0) {
                         Toast.init('Update Success');
                     } else {
@@ -10722,8 +10729,12 @@ NoteManager.load();
 $('.add-note').on('click', function () {
     NoteManager.add();
 });
+$('.empty-note').on('click', function () {
+    NoteManager.empty();
+});
+
 Event.on('waterfall', function () {
-    WaterFall.init($('#container .content'));
+    WaterFall.init($('#content'));
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -10835,11 +10846,25 @@ var NoteManager = function () {
                     });
                 });
                 Event.fire('waterfall');
+                Toast.init('Welcome To Visit');
             } else {
                 Toast.init(res.errorMsg);
             }
         }).catch(function () {
-            Toast.init('网络异常');
+            Toast.init('Network Anomaly');
+        });
+    }
+
+    function empty() {
+        $.post('/api/notes/empty').then(function (res) {
+            if (res.status === 0) {
+                $('#content').empty();
+                Toast.init('Empty Success');
+            } else {
+                Toast.init(res.errorMsg);
+            }
+        }).catch(function () {
+            Toast.init('Network Anomaly');
         });
     }
 
@@ -10849,7 +10874,8 @@ var NoteManager = function () {
 
     return {
         load: load,
-        add: add
+        add: add,
+        empty: empty
     };
 }();
 

@@ -18,32 +18,34 @@ router.get('/notes', (req, res, next) => {
     Note.findAll(opts).then((notes) => {
         res.send({ status: 0, data: notes });
     }).catch(() => {
-        res.send({ status: 1, errorMsg: '数据库异常' });
+        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
     })
 })
 
 router.post('/notes/add', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: '请先登录' })
+        return res.send({ status: 1, errorMsg: 'Please Login First' })
     }
     if (!req.body.note) {
-        return res.send({ status: 2, errorMsg: '内容不能为空' });
+        return res.send({ status: 2, errorMsg: 'Please Enter Your Note' });
     }
+
     var note = req.body.note;
     var uid = req.session.user.id;
-    console.log({ text: note, uid: uid })
-    Note.create({ text: note, uid: uid }).then(() => {
-        console.log(arguments)
+    var noteId = req.body.id;
+
+    Note.create({ text: note, id: noteId, uid: uid }).then(() => {
         res.send({ status: 0 })
     }).catch(function() {
-        res.send({ status: 1, errorMsg: '数据库异常或者你没有权限' });
+        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
     })
 })
 
 router.post('/notes/edit', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: '请先登录' })
+        return res.send({ status: 1, errorMsg: 'Please Login First' })
     }
+
     var noteId = req.body.id;
     var note = req.body.note;
     var uid = req.session.user.id;
@@ -51,13 +53,13 @@ router.post('/notes/edit', (req, res, next) => {
     Note.update({ text: note }, { where: { id: noteId, uid: uid } }).then(() => {
         res.send({ status: 0 })
     }).catch(() => {
-        res.send({ status: 1, errorMsg: '数据库异常' })
+        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' })
     })
 })
 
 router.post('/notes/delete', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: '请先登录' })
+        return res.send({ status: 1, errorMsg: 'Please Login First' })
     }
 
     var noteId = req.body.id
@@ -66,9 +68,24 @@ router.post('/notes/delete', (req, res, next) => {
     Note.destroy({ where: { id: noteId, uid: uid } }).then(() => {
         res.send({ status: 0 })
     }).catch(() => {
-        res.send({ status: 1, errorMsg: '数据库异常' });
+        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
     })
 
 })
+router.post('/notes/empty', (req, res, next) => {
+    if (!req.session || !req.session.user) {
+        return res.send({ status: 1, errorMsg: 'Please Login First' })
+    }
+
+    var uid = req.session.user.id;
+
+    Note.sync({ force: true }, { where: { uid: uid } }).then(() => {
+        res.send({ status: 0 })
+    }).catch(() => {
+        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
+    })
+
+})
+
 
 module.exports = router;

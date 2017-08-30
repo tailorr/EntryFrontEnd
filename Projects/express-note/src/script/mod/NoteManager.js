@@ -1,11 +1,10 @@
-const Toast = require('./Toast');
-const Note = require('./Note');
-const Event = require('./Event');
+const Toast = require('./Toast')
+const Note = require('./Note')
+const Event = require('./Event')
 
 let NoteManager = (() => {
     function load() {
-        $.get('/api/notes')
-            .then(res => {
+        $.get('/api/notes').then(res => {
                 if (res.status === 0) {
                     $.each(res.data, (idx, note) => {
                         Note.init({
@@ -13,23 +12,38 @@ let NoteManager = (() => {
                             initContext: note.text
                         });
                     });
-                    Event.fire('waterfall');
+                    Event.fire('waterfall')
+                    Toast.init('Welcome To Visit')
                 } else {
-                    Toast.init(res.errorMsg);
+                    Toast.init(res.errorMsg)
                 }
             })
             .catch(() => {
-                Toast.init('网络异常');
+                Toast.init('Network Anomaly')
             });
     }
 
+    function empty() {
+        $.post('/api/notes/empty').then(res => {
+            if (res.status === 0) {
+                $('#content').empty()
+                Toast.init('Empty Success')
+            } else {
+                Toast.init(res.errorMsg)
+            }
+        }).catch(() => {
+            Toast.init('Network Anomaly')
+        });
+    }
+
     function add() {
-        Note.init();
+        Note.init()
     }
 
     return {
         load: load,
-        add: add
+        add: add,
+        empty: empty
     }
 
 })();

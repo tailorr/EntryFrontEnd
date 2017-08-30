@@ -12,27 +12,25 @@
 
 <body>
     <div id="header">
-        <div class="header">
-            <div class="logo">TAIL NOTE</div>
-            <a class="add-note" title="Add New Note" href="#">Add New Note</a>
-            <ul class="user-area">
-                <% if (isLogin){ %>
-                    <li><img src="<%= user.avatar %>" alt=""></li>
-                    <li><span title="<%= user.username %>"><%= user.username %></span></li>
-                    <li><span class="line"> | </span> </li>
-                    <li><a class="logout" href="/auth/logout">注销</a></li>
-                    <%} else { %>
-                        <li><a class="login" title="GitHub登录" href="/auth/github"> GitHub登录</a>
-                        </li>
-                        <% } %>
-            </ul>
-        </div>
+        <h1 class="logo">TAIL NOTE</h1>
+        <ul class="user-area">
+            <% if (isLogin){ %>
+                <li><img src="<%= user.avatar %>" alt=""></li>
+                <li><span title="<%= user.username %>"><%= user.username %></span></li>
+                <li><span class="line"> | </span> </li>
+                <li><a class="logout" href="/auth/logout">Sign Out</a></li>
+                <%} else { %>
+                    <li>
+                        <a class="login" title="GitHub Login" href="/auth/github">GitHub Login</a>
+                    </li>
+                    <% } %>
+        </ul>
     </div>
-    <div id="container">
-        <aside class="side"></aside>
-        <div class="content"></div>
+    <div id="taskbar">
+        <a class="add-note" title="Add New Note" href="#">New Note</a>
+        <a class="empty-note" title="Empty Note" href="#">Empty Note</a>
     </div>
-    <div class="stars"></div>
+    <div id="content"></div>
     <script src="/js/index.js"></script>
 </body>
 

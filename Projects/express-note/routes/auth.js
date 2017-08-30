@@ -7,7 +7,7 @@ var GitHubStrategy = require('passport-github').Strategy;
 
 passport.serializeUser(function(user, done) {
     console.log('---serializeUser---')
-    console.log(user)
+        // console.log(user)
     done(null, user);
 });
 
@@ -49,6 +49,7 @@ router.get('/github/callback',
             provider: req.user.provider
         };
         res.redirect('/');
+        res.send({ username: req.session.user.username })
     });
 
 

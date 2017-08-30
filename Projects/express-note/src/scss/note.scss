@@ -8,7 +8,7 @@
 .note {
     position: absolute;
     margin: 20px;
-    width: 200px;
+    width: 250px;
     box-sizing: border-box;
     transition: all 1s;
     background: #fff;
@@ -34,7 +34,7 @@
     }
     .note-content {
         padding: 20px;
-        min-height: 40px;
+        min-height: 60px;
         line-height: 30px;
         background: rgba(255, 255, 255, 0.3);
         border-top: 1px solid #EBEDF1;

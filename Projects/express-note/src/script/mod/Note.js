@@ -11,9 +11,10 @@ let Note = (() => {
             this.defaultOpts = {
                 id: '',
                 $ct: $('#content').length > 0 ? $('#content') : $('body'),
-                initContext: 'Input your note here'
+                initContext: 'Input your note here',
             }
             this._initOpts(opts)
+            console.log(this.opts)
             this._createNote()
             this._bindEvent()
         }
@@ -34,20 +35,22 @@ let Note = (() => {
                             </div>
                        </div>`
             this.$note = $(tpl)
-            $('#container .content').append(this.$note)
+            $('#content').append(this.$note)
+
             this._initLayout()
+
             if (!this.id) {
                 this.$mask = Mask.init()
                 Toast.init('Create Sucess')
             }
-            if (this.id) Toast.init('Welcome Back')
+
         }
         _initLayout() {
             this.$note.css({
                 "position": "absolute",
                 "top": "50%",
                 "left": "50%",
-                "transform": "translate(calc(-50% - 125px), calc(-50% + 200px))",
+                "transform": "translate(calc(-50% - 20px), calc(-50% - 70px))",
                 "z-index": "1000"
             })
         }
@@ -64,7 +67,6 @@ let Note = (() => {
                 this._delete()
                 this.$mask && this.$mask.remove()
                 this.$mask = null
-
                 this._fulfilLayout()
             })
 
@@ -77,15 +79,13 @@ let Note = (() => {
                 this.$mask && this.$mask.remove()
                 this.$mask = null
                 this._fulfilLayout()
-                console.log(this)
+
                 if (this.id) {
                     this._edit($note.html())
                 } else {
                     this._add($note.html())
                 }
-                console.log(this)
             })
-
 
             //增加、修改
             $note.on('focus', () => {
@@ -110,7 +110,6 @@ let Note = (() => {
         }
 
 
-
         /* ---------------------------以下是数据库的相关操作----------------------------- */
         //存储到数据库
         _add(msg) {
@@ -127,25 +126,28 @@ let Note = (() => {
 
         //从数据库删除
         _delete() {
-                $.post('/api/notes/delete', { id: this.id }).then(res => {
-                    if (res.status === 0) {
-                        this.$note.remove()
-                        Toast.init('Delete Success')
-                        Event.fire('waterfall')
-                    } else {
-                        Toast.init(res.errorMsg);
-                    }
-                }).catch(() => {
-                    console.log('xxxxxxxxxxx')
-                });
+            $.post('/api/notes/delete', { id: this.id }).then(res => {
+                console.log(this.id)
+                if (res.status === 0) {
+                    this.$note.remove()
+                    Toast.init('Delete Success')
+                    Event.fire('waterfall')
+                } else {
+                    Toast.init(res.errorMsg);
+                }
+            }).catch(() => {
+                console.log('xxxxxxxxxxx')
+            });
 
-            }
-            // 修改数据库内容
+        }
+
+        // 修改数据库内容
         _edit(msg) {
             $.post('/api/notes/edit', {
                 id: this.id,
                 note: msg
             }).then(res => {
+                console.log(this.id)
                 if (res.status === 0) {
                     Toast.init('Update Success');
                 } else {
