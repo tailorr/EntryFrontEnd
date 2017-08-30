@@ -10,11 +10,13 @@ let Note = (() => {
         constructor(opts) {
             this.defaultOpts = {
                 id: '',
+                uid: '',
                 $ct: $('#content').length > 0 ? $('#content') : $('body'),
+                createTime: new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/),
                 initContext: 'Input your note here',
+                title: 'Input Your Title...'
             }
             this._initOpts(opts)
-            console.log(this.opts)
             this._createNote()
             this._bindEvent()
         }
@@ -23,14 +25,17 @@ let Note = (() => {
             this.opts = $.extend({}, this.defaultOpts, opts || {})
                 // Object.assign()
             this.id = this.opts.id ? this.opts.id : ''
+            this.uid = this.opts.uid ? this.opts.uid : ''
         }
         _createNote() {
             let tpl = `<div class="note">
-                            <div class="note-header">
+                            <div class="note-header" contenteditable="true">
+                                ${this.opts.title}
                                 <i class="delete">&#xe70c;</i>
                             </div>
                             <div class="note-content" contenteditable="true">${this.opts.initContext}</div>
                             <div class="note-footer">
+                                <span class="time">${this.opts.createTime}</span>
                                 <button class="save">Save</button>
                             </div>
                        </div>`
@@ -127,11 +132,25 @@ let Note = (() => {
         //从数据库删除
         _delete() {
             $.post('/api/notes/delete', { id: this.id }).then(res => {
-                console.log(this.id)
                 if (res.status === 0) {
                     this.$note.remove()
                     Toast.init('Delete Success')
                     Event.fire('waterfall')
+                } else {
+                    Toast.init(res.errorMsg);
+                }
+            }).catch(() => {
+                console.log('xxxxxxxxxxx')
+            });
+
+        }
+
+        _empty() {
+            $.post('/api/notes/empty', { uid: this.uid }).then(res => {
+                console.log(this.uid)
+                if (res.status === 0) {
+                    this.$note.remove()
+                    Toast.init('Empty Success')
                 } else {
                     Toast.init(res.errorMsg);
                 }

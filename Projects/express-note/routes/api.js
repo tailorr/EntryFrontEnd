@@ -15,8 +15,9 @@ router.get('/notes', (req, res, next) => {
     if (req.session && req.session.user) {
         opts.where = { uid: req.session.user.id }
     }
+    var user = req.session.user
     Note.findAll(opts).then((notes) => {
-        res.send({ status: 0, data: notes });
+        res.send({ status: 0, data: notes, uerInfo: user });
     }).catch(() => {
         res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
     })
@@ -32,10 +33,11 @@ router.post('/notes/add', (req, res, next) => {
 
     var note = req.body.note;
     var uid = req.session.user.id;
-    var noteId = req.body.id;
+    // var noteId = req.body.id;
+    var user = req.session.user
 
-    Note.create({ text: note, id: noteId, uid: uid }).then(() => {
-        res.send({ status: 0 })
+    Note.create({ text: note, uid: uid }).then(() => {
+        res.send({ status: 0, uerInfo: user })
     }).catch(function() {
         res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
     })

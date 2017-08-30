@@ -4,12 +4,16 @@ const Event = require('./Event')
 
 let NoteManager = (() => {
     function load() {
+        var timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/
         $.get('/api/notes').then(res => {
+                console.log(res)
                 if (res.status === 0) {
                     $.each(res.data, (idx, note) => {
+                        var time = note.createdAt.match(timeRegex)
                         Note.init({
                             id: note.id,
-                            initContext: note.text
+                            initContext: note.text,
+                            createTime: time
                         });
                     });
                     Event.fire('waterfall')
@@ -24,16 +28,19 @@ let NoteManager = (() => {
     }
 
     function empty() {
-        $.post('/api/notes/empty').then(res => {
+        console.log(this.uid)
+        $.post('/api/notes/empty', { uid: this.uid }).then(res => {
+            console.log(res)
             if (res.status === 0) {
-                $('#content').empty()
+                this.$note.remove()
                 Toast.init('Empty Success')
             } else {
-                Toast.init(res.errorMsg)
+                Toast.init(res.errorMsg);
             }
         }).catch(() => {
-            Toast.init('Network Anomaly')
+            console.log('xxxxxxxxxxx')
         });
+
     }
 
     function add() {

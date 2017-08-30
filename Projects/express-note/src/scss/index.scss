@@ -16,19 +16,17 @@ li {
 }
 
 body {
-    font: 18px/1.4 'Arial';
-    color: #3b3b3b;
+    font: 18px/1.4 'arial';
+    color: #0B1013;
 }
 
 a {
     text-decoration: none;
-    color: #3b3b3b;
+    color: #0B1013;
 }
 
 #header {
-    height: 50px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding: 5px 20px;
     background: #fafafa;
     border-bottom: 1px solid #EBEDF1;
     &:after {
@@ -37,7 +35,7 @@ a {
         clear: both;
     }
     .logo {
-        margin-top: 6px;
+        margin-top: 8px;
         float: left;
         font-size: 25px;
         text-align: center;
@@ -94,10 +92,12 @@ a {
     .add-note,
     .empty-note {
         padding: 5px 10px;
-        background: #eee;
+        background: #D75455;
+        color: #F0F0F0;
         border-radius: 2px;
+        box-shadow: 0 0px 0px 1px rgba(215, 84, 85, 0.6);
         &:hover {
-            background: #e9e9e9
+            color: #fff
         }
     }
     .empty-note {

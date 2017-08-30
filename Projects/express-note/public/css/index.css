@@ -13,17 +13,15 @@ li {
   list-style: none; }
 
 body {
-  font: 18px/1.4 'Arial';
-  color: #3b3b3b; }
+  font: 18px/1.4 'arial';
+  color: #0B1013; }
 
 a {
   text-decoration: none;
-  color: #3b3b3b; }
+  color: #0B1013; }
 
 #header {
-  height: 50px;
-  padding-left: 20px;
-  padding-right: 20px;
+  padding: 5px 20px;
   background: #fafafa;
   border-bottom: 1px solid #EBEDF1; }
   #header:after {
@@ -31,7 +29,7 @@ a {
     display: block;
     clear: both; }
   #header .logo {
-    margin-top: 6px;
+    margin-top: 8px;
     float: left;
     font-size: 25px;
     text-align: center; }
@@ -76,11 +74,13 @@ a {
   #taskbar .add-note,
   #taskbar .empty-note {
     padding: 5px 10px;
-    background: #eee;
-    border-radius: 2px; }
+    background: #D75455;
+    color: #F0F0F0;
+    border-radius: 2px;
+    box-shadow: 0 0px 0px 1px rgba(215, 84, 85, 0.6); }
     #taskbar .add-note:hover,
     #taskbar .empty-note:hover {
-      background: #e9e9e9; }
+      color: #fff; }
   #taskbar .empty-note {
     margin-left: 20px; }
 
@@ -120,11 +120,11 @@ a {
   transform: translateX(-50%);
   top: 10px;
   font-size: 16px;
-  color: #D15A39;
+  color: #D75455;
   padding: 5px 10px;
   display: none;
-  opacity: 0.7;
-  z-index: 1001; }
+  z-index: 1001;
+  background: #fafafa; }
 @font-face {
   font-family: 'close';
   /* project id 397710 */
@@ -140,16 +140,23 @@ a {
   background: #fff;
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 3px 5px rgba(0, 0, 0, 0.1); }
   .note .note-header {
-    height: 30px;
-    background: #fafafa; }
+    padding-left: 10px;
+    background: #D75455;
+    font: 14px/30px Helvetica, arial, sans-serif;
+    color: #A9A9A9;
+    -webkit-tap-highlight-color: transparent;
+    outline: 0;
+    cursor: pointer; }
+    .note .note-header:hover {
+      background: #CB4042; }
     .note .note-header .delete {
       position: absolute;
       right: 7px;
-      top: 7px;
+      top: 0;
       font-family: "close" !important;
       font-size: 12px;
       font-style: normal;
-      color: #D5D5D5;
+      color: #0B1013;
       transition: -webkit-transform .8s;
       transition: transform .8s;
       transition: transform .8s, -webkit-transform .8s;
@@ -158,30 +165,40 @@ a {
         -webkit-transform: rotateZ(90deg);
         -ms-transform: rotate(90deg);
         transform: rotateZ(90deg);
-        color: #3b3b3b; }
+        color: #fff; }
   .note .note-content {
     padding: 20px;
     min-height: 60px;
-    line-height: 30px;
     background: rgba(255, 255, 255, 0.3);
     border-top: 1px solid #EBEDF1;
     border-bottom: 1px solid #EBEDF1;
-    color: #7D8490;
+    font: 16px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
+    color: #A9A9A9;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-modify: read-write-plaintext-only;
     outline: 0; }
-  .note .note-footer button {
-    float: right;
-    width: 50%;
-    height: 30px;
-    border: none;
-    background: none;
-    color: #7D8490; }
-    .note .note-footer button:hover {
-      background: #e9e9e9; }
-  .note .note-footer:after {
-    content: "";
-    display: table;
-    clear: both; }
+  .note .note-footer {
+    font: 12px/30px Helvetica, arial, \5b8b\4f53, sans-serif; }
+    .note .note-footer .time {
+      float: left;
+      width: 70%;
+      text-indent: 10px;
+      color: #DADADA; }
+    .note .note-footer .save {
+      float: right;
+      width: 30%;
+      height: 30px;
+      border: none;
+      background: rgba(255, 255, 255, 0.3);
+      color: #A9A9A9;
+      cursor: pointer; }
+      .note .note-footer .save:hover {
+        background: #e9e9e9; }
+      .note .note-footer .save:visited {
+        outline: none; }
+    .note .note-footer:after {
+      content: "";
+      display: table;
+      clear: both; }
 
 /*# sourceMappingURL=index.css.map*/

@@ -10457,11 +10457,13 @@ var Note = function () {
 
             this.defaultOpts = {
                 id: '',
+                uid: '',
                 $ct: $('#content').length > 0 ? $('#content') : $('body'),
-                initContext: 'Input your note here'
+                createTime: new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/),
+                initContext: 'Input your note here',
+                title: 'Input Your Title...'
             };
             this._initOpts(opts);
-            console.log(this.opts);
             this._createNote();
             this._bindEvent();
         }
@@ -10472,11 +10474,12 @@ var Note = function () {
                 this.opts = $.extend({}, this.defaultOpts, opts || {});
                 // Object.assign()
                 this.id = this.opts.id ? this.opts.id : '';
+                this.uid = this.opts.uid ? this.opts.uid : '';
             }
         }, {
             key: '_createNote',
             value: function _createNote() {
-                var tpl = '<div class="note">\n                            <div class="note-header">\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <button class="save">Save</button>\n                            </div>\n                       </div>';
+                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">\n                                ' + this.opts.title + '\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <span class="time">' + this.opts.createTime + '</span>\n                                <button class="save">Save</button>\n                            </div>\n                       </div>';
                 this.$note = $(tpl);
                 $('#content').append(this.$note);
 
@@ -10586,11 +10589,27 @@ var Note = function () {
                 var _this3 = this;
 
                 $.post('/api/notes/delete', { id: this.id }).then(function (res) {
-                    console.log(_this3.id);
                     if (res.status === 0) {
                         _this3.$note.remove();
                         Toast.init('Delete Success');
                         Event.fire('waterfall');
+                    } else {
+                        Toast.init(res.errorMsg);
+                    }
+                }).catch(function () {
+                    console.log('xxxxxxxxxxx');
+                });
+            }
+        }, {
+            key: '_empty',
+            value: function _empty() {
+                var _this4 = this;
+
+                $.post('/api/notes/empty', { uid: this.uid }).then(function (res) {
+                    console.log(_this4.uid);
+                    if (res.status === 0) {
+                        _this4.$note.remove();
+                        Toast.init('Empty Success');
                     } else {
                         Toast.init(res.errorMsg);
                     }
@@ -10604,13 +10623,13 @@ var Note = function () {
         }, {
             key: '_edit',
             value: function _edit(msg) {
-                var _this4 = this;
+                var _this5 = this;
 
                 $.post('/api/notes/edit', {
                     id: this.id,
                     note: msg
                 }).then(function (res) {
-                    console.log(_this4.id);
+                    console.log(_this5.id);
                     if (res.status === 0) {
                         Toast.init('Update Success');
                     } else {
@@ -10836,12 +10855,16 @@ var Event = __webpack_require__(2);
 
 var NoteManager = function () {
     function load() {
+        var timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/;
         $.get('/api/notes').then(function (res) {
+            console.log(res);
             if (res.status === 0) {
                 $.each(res.data, function (idx, note) {
+                    var time = note.createdAt.match(timeRegex);
                     Note.init({
                         id: note.id,
-                        initContext: note.text
+                        initContext: note.text,
+                        createTime: time
                     });
                 });
                 Event.fire('waterfall');
@@ -10855,15 +10878,19 @@ var NoteManager = function () {
     }
 
     function empty() {
-        $.post('/api/notes/empty').then(function (res) {
+        var _this = this;
+
+        console.log(this.uid);
+        $.post('/api/notes/empty', { uid: this.uid }).then(function (res) {
+            console.log(res);
             if (res.status === 0) {
-                $('#content').empty();
+                _this.$note.remove();
                 Toast.init('Empty Success');
             } else {
                 Toast.init(res.errorMsg);
             }
         }).catch(function () {
-            Toast.init('Network Anomaly');
+            console.log('xxxxxxxxxxx');
         });
     }
 

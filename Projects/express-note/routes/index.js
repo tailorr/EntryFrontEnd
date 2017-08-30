@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    var data;
+    var data
     if (req.session.user) {
         data = {
             isLogin: true,
@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
             isLogin: false
         }
     }
-    res.render('index', data);
+    res.render('index', data)
 });
 
-module.exports = router;
+module.exports = router
