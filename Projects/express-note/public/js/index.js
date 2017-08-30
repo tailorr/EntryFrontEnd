@@ -10526,7 +10526,6 @@ var Note = function () {
                         Toast.init("Please Enter Your Note");
                         return;
                     }
-                    console.log(_this.opts);
                     _this.$mask && _this.$mask.remove();
                     _this.$mask = null;
                     _this._fulfilLayout();
