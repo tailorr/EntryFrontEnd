@@ -149,23 +149,6 @@ a {
     cursor: pointer; }
     .note .note-header:hover {
       background: #CB4042; }
-    .note .note-header .delete {
-      position: absolute;
-      right: 7px;
-      top: 0;
-      font-family: "close" !important;
-      font-size: 12px;
-      font-style: normal;
-      color: #0B1013;
-      transition: -webkit-transform .8s;
-      transition: transform .8s;
-      transition: transform .8s, -webkit-transform .8s;
-      cursor: pointer; }
-      .note .note-header .delete:hover {
-        -webkit-transform: rotateZ(90deg);
-        -ms-transform: rotate(90deg);
-        transform: rotateZ(90deg);
-        color: #fff; }
   .note .note-content {
     padding: 20px;
     min-height: 60px;
@@ -200,5 +183,22 @@ a {
       content: "";
       display: table;
       clear: both; }
+  .note .delete {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    font-family: "close" !important;
+    font-size: 12px;
+    font-style: normal;
+    color: #0B1013;
+    transition: -webkit-transform .8s;
+    transition: transform .8s;
+    transition: transform .8s, -webkit-transform .8s;
+    cursor: pointer; }
+    .note .delete:hover {
+      -webkit-transform: rotateZ(90deg);
+      -ms-transform: rotate(90deg);
+      transform: rotateZ(90deg);
+      color: #fff; }
 
 /*# sourceMappingURL=index.css.map*/

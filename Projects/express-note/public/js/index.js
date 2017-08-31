@@ -10479,7 +10479,7 @@ var Note = function () {
         }, {
             key: '_createNote',
             value: function _createNote() {
-                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">\n                                ' + this.opts.title + '\n                                <i class="delete">&#xe70c;</i>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <span class="time">' + this.opts.createTime + '</span>\n                                <button class="save">Save</button>\n                            </div>\n                       </div>';
+                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">' + this.opts.title + '</div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <span class="time">' + this.opts.createTime + ' Noted by tail</span>\n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
                 this.$note = $(tpl);
                 $('#content').append(this.$note);
 
@@ -10511,6 +10511,7 @@ var Note = function () {
             value: function _bindEvent() {
                 var _this = this;
 
+                var $title = this.$note.find('.note-header');
                 var $note = this.$note.find('.note-content');
                 var $delete = this.$note.find('.delete');
                 var $save = this.$note.find('.save');
@@ -10534,9 +10535,9 @@ var Note = function () {
                     _this._fulfilLayout();
 
                     if (_this.id) {
-                        _this._edit($note.html());
+                        _this._edit($title.html(), $note.html());
                     } else {
-                        _this._add($note.html());
+                        _this._add($title.html(), $note.html());
                     }
                 });
 
@@ -10554,9 +10555,29 @@ var Note = function () {
                         _this.$mask && _this.$mask.remove();
                         _this.$mask = null;
                         if (_this.id) {
-                            _this._edit($note.html());
+                            _this._edit($title.html(), $note.html());
                         } else {
-                            _this._add($note.html());
+                            _this._add($title.html(), $note.html());
+                        }
+                    }
+                });
+
+                $title.on('focus', function () {
+                    if ($title.text() === 'Input Your Title...') $title.html('');
+                    $title.data('before', $title.html());
+                    _this.$mask = _this.$mask ? _this.$mask : Mask.init();
+                    _this._initLayout();
+                }).on('blur paste', function () {
+                    if (!_this.id) return;
+                    if ($title.data('before') != $title.html()) {
+                        $title.data('before', $title.html());
+                        _this._fulfilLayout();
+                        _this.$mask && _this.$mask.remove();
+                        _this.$mask = null;
+                        if (_this.id) {
+                            _this._edit($title.html(), $note.html());
+                        } else {
+                            _this._add($title.html(), $title.html());
                         }
                     }
                 });
@@ -10567,10 +10588,11 @@ var Note = function () {
 
         }, {
             key: '_add',
-            value: function _add(msg) {
+            value: function _add(title, msg) {
                 var _this2 = this;
 
-                $.post('/api/notes/add', { note: msg }).then(function (res) {
+                $.post('/api/notes/add', { title: title, note: msg }).then(function (res) {
+                    console.log(res);
                     if (res.status === 0) {
                         Toast.init('Add Success');
                     } else {
@@ -10600,36 +10622,32 @@ var Note = function () {
                     console.log('xxxxxxxxxxx');
                 });
             }
-        }, {
-            key: '_empty',
-            value: function _empty() {
-                var _this4 = this;
 
-                $.post('/api/notes/empty', { uid: this.uid }).then(function (res) {
-                    console.log(_this4.uid);
-                    if (res.status === 0) {
-                        _this4.$note.remove();
-                        Toast.init('Empty Success');
-                    } else {
-                        Toast.init(res.errorMsg);
-                    }
-                }).catch(function () {
-                    console.log('xxxxxxxxxxx');
-                });
-            }
+            // _empty() {
+            //     $.post('/api/notes/empty', { uid: this.uid }).then(res => {
+            //         console.log(this.uid)
+            //         if (res.status === 0) {
+            //             // this.$note.remove()
+            //             Toast.init('Empty Success')
+            //         } else {
+            //             Toast.init(res.errorMsg);
+            //         }
+            //     }).catch(() => {
+            //         console.log('xxxxxxxxxxx')
+            //     });
+
+            // }
 
             // 修改数据库内容
 
         }, {
             key: '_edit',
-            value: function _edit(msg) {
-                var _this5 = this;
-
+            value: function _edit(title, msg) {
                 $.post('/api/notes/edit', {
                     id: this.id,
+                    title: title,
                     note: msg
                 }).then(function (res) {
-                    console.log(_this5.id);
                     if (res.status === 0) {
                         Toast.init('Update Success');
                     } else {
@@ -10857,9 +10875,8 @@ var NoteManager = function () {
     function load() {
         var timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/;
         $.get('/api/notes').then(function (res) {
-            console.log(res);
             if (res.status === 0) {
-                $.each(res.data, function (idx, note) {
+                $.each(res.data, function (index, note) {
                     var time = note.createdAt.match(timeRegex);
                     Note.init({
                         id: note.id,
@@ -10880,8 +10897,7 @@ var NoteManager = function () {
     function empty() {
         var _this = this;
 
-        console.log(this.uid);
-        $.post('/api/notes/empty', { uid: this.uid }).then(function (res) {
+        $.post('/api/notes/empty').then(function (res) {
             console.log(res);
             if (res.status === 0) {
                 _this.$note.remove();
@@ -10890,7 +10906,7 @@ var NoteManager = function () {
                 Toast.init(res.errorMsg);
             }
         }).catch(function () {
-            console.log('xxxxxxxxxxx');
+            console.log('Network Anomaly');
         });
     }
 

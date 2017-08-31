@@ -6,9 +6,8 @@ let NoteManager = (() => {
     function load() {
         var timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/
         $.get('/api/notes').then(res => {
-                console.log(res)
                 if (res.status === 0) {
-                    $.each(res.data, (idx, note) => {
+                    $.each(res.data, (index, note) => {
                         var time = note.createdAt.match(timeRegex)
                         Note.init({
                             id: note.id,
@@ -28,8 +27,8 @@ let NoteManager = (() => {
     }
 
     function empty() {
-        console.log(this.uid)
-        $.post('/api/notes/empty', { uid: this.uid }).then(res => {
+
+        $.post('/api/notes/empty').then(res => {
             console.log(res)
             if (res.status === 0) {
                 this.$note.remove()
@@ -38,7 +37,7 @@ let NoteManager = (() => {
                 Toast.init(res.errorMsg);
             }
         }).catch(() => {
-            console.log('xxxxxxxxxxx')
+            console.log('Network Anomaly')
         });
 
     }

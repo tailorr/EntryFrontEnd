@@ -29,15 +29,13 @@ let Note = (() => {
         }
         _createNote() {
             let tpl = `<div class="note">
-                            <div class="note-header" contenteditable="true">
-                                ${this.opts.title}
-                                <i class="delete">&#xe70c;</i>
-                            </div>
+                            <div class="note-header" contenteditable="true">${this.opts.title}</div>
                             <div class="note-content" contenteditable="true">${this.opts.initContext}</div>
                             <div class="note-footer">
-                                <span class="time">${this.opts.createTime}</span>
+                                <span class="time">${this.opts.createTime} Noted by tail</span>
                                 <button class="save">Save</button>
                             </div>
+                            <i class="delete">&#xe70c;</i>
                        </div>`
             this.$note = $(tpl)
             $('#content').append(this.$note)
@@ -63,6 +61,7 @@ let Note = (() => {
             Event.fire('waterfall');
         }
         _bindEvent() {
+            let $title = this.$note.find('.note-header')
             let $note = this.$note.find('.note-content')
             let $delete = this.$note.find('.delete')
             let $save = this.$note.find('.save')
@@ -86,9 +85,9 @@ let Note = (() => {
                 this._fulfilLayout()
 
                 if (this.id) {
-                    this._edit($note.html())
+                    this._edit($title.html(), $note.html())
                 } else {
-                    this._add($note.html())
+                    this._add($title.html(), $note.html())
                 }
             })
 
@@ -106,9 +105,29 @@ let Note = (() => {
                     this.$mask && this.$mask.remove()
                     this.$mask = null
                     if (this.id) {
-                        this._edit($note.html())
+                        this._edit($title.html(), $note.html())
                     } else {
-                        this._add($note.html())
+                        this._add($title.html(), $note.html())
+                    }
+                }
+            })
+
+            $title.on('focus', () => {
+                if ($title.text() === 'Input Your Title...') $title.html('')
+                $title.data('before', $title.html())
+                this.$mask = this.$mask ? this.$mask : Mask.init()
+                this._initLayout()
+            }).on('blur paste', () => {
+                if (!this.id) return
+                if ($title.data('before') != $title.html()) {
+                    $title.data('before', $title.html())
+                    this._fulfilLayout()
+                    this.$mask && this.$mask.remove()
+                    this.$mask = null
+                    if (this.id) {
+                        this._edit($title.html(), $note.html())
+                    } else {
+                        this._add($title.html(), $title.html())
                     }
                 }
             });
@@ -117,8 +136,9 @@ let Note = (() => {
 
         /* ---------------------------以下是数据库的相关操作----------------------------- */
         //存储到数据库
-        _add(msg) {
-            $.post('/api/notes/add', { note: msg }).then(res => {
+        _add(title, msg) {
+            $.post('/api/notes/add', { title: title, note: msg }).then(res => {
+                console.log(res)
                 if (res.status === 0) {
                     Toast.init('Add Success')
                 } else {
@@ -145,28 +165,28 @@ let Note = (() => {
 
         }
 
-        _empty() {
-            $.post('/api/notes/empty', { uid: this.uid }).then(res => {
-                console.log(this.uid)
-                if (res.status === 0) {
-                    this.$note.remove()
-                    Toast.init('Empty Success')
-                } else {
-                    Toast.init(res.errorMsg);
-                }
-            }).catch(() => {
-                console.log('xxxxxxxxxxx')
-            });
+        // _empty() {
+        //     $.post('/api/notes/empty', { uid: this.uid }).then(res => {
+        //         console.log(this.uid)
+        //         if (res.status === 0) {
+        //             // this.$note.remove()
+        //             Toast.init('Empty Success')
+        //         } else {
+        //             Toast.init(res.errorMsg);
+        //         }
+        //     }).catch(() => {
+        //         console.log('xxxxxxxxxxx')
+        //     });
 
-        }
+        // }
 
         // 修改数据库内容
-        _edit(msg) {
+        _edit(title, msg) {
             $.post('/api/notes/edit', {
                 id: this.id,
+                title: title,
                 note: msg
             }).then(res => {
-                console.log(this.id)
                 if (res.status === 0) {
                     Toast.init('Update Success');
                 } else {

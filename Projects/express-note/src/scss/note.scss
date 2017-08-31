@@ -24,21 +24,6 @@
         &:hover {
             background: #CB4042;
         }
-        .delete {
-            position: absolute;
-            right: 7px;
-            top: 0;
-            font-family: "close" !important;
-            font-size: 12px;
-            font-style: normal;
-            color: #0B1013;
-            transition: transform .8s;
-            cursor: pointer;
-            &:hover {
-                transform: rotateZ(90deg);
-                color: #fff;
-            }
-        }
     }
     .note-content {
         padding: 20px;
@@ -79,6 +64,21 @@
             content: "";
             display: table;
             clear: both;
+        }
+    }
+    .delete {
+        position: absolute;
+        right: 7px;
+        top: 7px;
+        font-family: "close" !important;
+        font-size: 12px;
+        font-style: normal;
+        color: #0B1013;
+        transition: transform .8s;
+        cursor: pointer;
+        &:hover {
+            transform: rotateZ(90deg);
+            color: #fff;
         }
     }
 }

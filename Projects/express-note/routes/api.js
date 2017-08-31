@@ -31,12 +31,13 @@ router.post('/notes/add', (req, res, next) => {
         return res.send({ status: 2, errorMsg: 'Please Enter Your Note' });
     }
 
-    var note = req.body.note;
-    var uid = req.session.user.id;
-    // var noteId = req.body.id;
+    var note = req.body.note
+    var title = req.body.title
+    var uid = req.session.user.id
+        // var noteId = req.body.id;
     var user = req.session.user
 
-    Note.create({ text: note, uid: uid }).then(() => {
+    Note.create({ title: title, text: note, uid: uid }).then(() => {
         res.send({ status: 0, uerInfo: user })
     }).catch(function() {
         res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
@@ -50,9 +51,10 @@ router.post('/notes/edit', (req, res, next) => {
 
     var noteId = req.body.id;
     var note = req.body.note;
+    var title = req.body.title;
     var uid = req.session.user.id;
 
-    Note.update({ text: note }, { where: { id: noteId, uid: uid } }).then(() => {
+    Note.update({ title: title, text: note }, { where: { id: noteId, uid: uid } }).then(() => {
         res.send({ status: 0 })
     }).catch(() => {
         res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' })
@@ -79,10 +81,14 @@ router.post('/notes/empty', (req, res, next) => {
         return res.send({ status: 1, errorMsg: 'Please Login First' })
     }
 
-    var uid = req.session.user.id;
+    var user = req.session.user
 
-    Note.sync({ force: true }, { where: { uid: uid } }).then(() => {
-        res.send({ status: 0 })
+    console.log('empty...........................................................')
+    console.log(user)
+    console.log('empty...........................................................')
+
+    Note.drop({ where: { uid: uid } }).then(() => {
+        res.send({ status: 0, uerInfo: user })
     }).catch(() => {
         res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
     })

@@ -25,6 +25,9 @@ const Note = sequelize.define('note', {
     },
     uid: {
         type: Sequelize.STRING
+    },
+    title: {
+        type: Sequelize.STRING
     }
 })
 
