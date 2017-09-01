@@ -15,6 +15,15 @@ router.get('/', function(req, res, next) {
         }
     }
     res.render('index', data)
-});
+})
+
+
+router.get('/login', (req, res, next) => {
+    if (req.session.user) {
+        res.send({ status: 0, userInfo: req.session.user })
+    } else {
+        res.send({ status: 1, errorMsg: 'Please login first' })
+    }
+})
 
 module.exports = router

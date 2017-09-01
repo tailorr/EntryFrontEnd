@@ -10458,6 +10458,7 @@ var Note = function () {
             this.defaultOpts = {
                 id: '',
                 uid: '',
+                author: 'Passby',
                 $ct: $('#content').length > 0 ? $('#content') : $('body'),
                 createTime: new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/),
                 initContext: 'Input your note here',
@@ -10475,14 +10476,23 @@ var Note = function () {
                 // Object.assign()
                 this.id = this.opts.id ? this.opts.id : '';
                 this.uid = this.opts.uid ? this.opts.uid : '';
+                this.title = this.opts.title ? this.opts.title : 'Input your note here';
+                this.initContext = this.opts.initContext ? this.opts.initContext : 'Input your note here';
+                this.author = this.opts.author ? this.opts.author : 'Passerby';
+                this.createTime = this.opts.createTime ? this.opts.createTime : new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/);
             }
         }, {
             key: '_createNote',
             value: function _createNote() {
-                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">' + this.opts.title + '</div>\n                            <div class="note-content" contenteditable="true">' + this.opts.initContext + '</div>\n                            <div class="note-footer">\n                                <span class="time">' + this.opts.createTime + ' Noted by tail</span>\n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
+                var _this = this;
+
+                $.get('/login').then(function (res) {
+                    _this.author = res.userInfo.username;
+                    console.log(_this.author);
+                });
+                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">' + this.title + '</div>\n                            <div class="note-content" contenteditable="true">' + this.initContext + '</div>\n                            <div class="note-footer">\n                                <span class="time">' + this.createTime + ' by ' + this.author + '</span>\n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
                 this.$note = $(tpl);
                 $('#content').append(this.$note);
-
                 this._initLayout();
 
                 if (!this.id) {
@@ -10509,7 +10519,7 @@ var Note = function () {
         }, {
             key: '_bindEvent',
             value: function _bindEvent() {
-                var _this = this;
+                var _this2 = this;
 
                 var $title = this.$note.find('.note-header');
                 var $note = this.$note.find('.note-content');
@@ -10518,10 +10528,11 @@ var Note = function () {
 
                 //删除
                 $delete.on('click', function () {
-                    _this._delete();
-                    _this.$mask && _this.$mask.remove();
-                    _this.$mask = null;
-                    _this._fulfilLayout();
+                    _this2._delete();
+                    if (!_this2.id) _this2.$note.remove();
+                    _this2.$mask && _this2.$mask.remove();
+                    _this2.$mask = null;
+                    _this2._fulfilLayout();
                 });
 
                 // 保存
@@ -10530,54 +10541,70 @@ var Note = function () {
                         Toast.init("Please Enter Your Note");
                         return;
                     }
-                    _this.$mask && _this.$mask.remove();
-                    _this.$mask = null;
-                    _this._fulfilLayout();
 
-                    if (_this.id) {
-                        _this._edit($title.html(), $note.html());
+                    _this2.$mask && _this2.$mask.remove();
+                    _this2.$mask = null;
+                    _this2._fulfilLayout();
+
+                    if (_this2.id) {
+                        _this2._edit($title.html(), $note.html());
                     } else {
-                        _this._add($title.html(), $note.html());
+                        _this2._add($title.html(), $note.html());
                     }
                 });
 
                 //增加、修改
                 $note.on('focus', function () {
-                    if ($note.text() === 'Input your note here') $note.html('');
-                    $note.data('before', $note.html());
-                    _this.$mask = _this.$mask ? _this.$mask : Mask.init();
-                    _this._initLayout();
+                    $.get('/login').then(function (res) {
+                        if (res.status === 0) {
+                            if ($note.text() === 'Input your note here') $note.html('');
+                            $note.data('before', $note.html());
+                            _this2.$mask = _this2.$mask ? _this2.$mask : Mask.init();
+                            _this2._initLayout();
+                        } else {
+                            Toast.init(res.errorMsg);
+                            return;
+                        }
+                    });
                 }).on('blur paste', function () {
-                    if (!_this.id) return;
+                    if (!_this2.id) return;
                     if ($note.data('before') != $note.html()) {
                         $note.data('before', $note.html());
-                        _this._fulfilLayout();
-                        _this.$mask && _this.$mask.remove();
-                        _this.$mask = null;
-                        if (_this.id) {
-                            _this._edit($title.html(), $note.html());
+                        _this2._fulfilLayout();
+                        _this2.$mask && _this2.$mask.remove();
+                        _this2.$mask = null;
+                        if (_this2.id) {
+                            _this2._edit($title.html(), $note.html());
                         } else {
-                            _this._add($title.html(), $note.html());
+                            _this2._add($title.html(), $note.html());
                         }
                     }
                 });
 
                 $title.on('focus', function () {
-                    if ($title.text() === 'Input Your Title...') $title.html('');
-                    $title.data('before', $title.html());
-                    _this.$mask = _this.$mask ? _this.$mask : Mask.init();
-                    _this._initLayout();
+                    $.get('/login').then(function (res) {
+                        console.log(res);
+                        if (res.status === 0) {
+                            if ($title.text() === 'Input Your Title...') $title.html('');
+                            $title.data('before', $title.html());
+                            _this2.$mask = _this2.$mask ? _this2.$mask : Mask.init();
+                            _this2._initLayout();
+                        } else {
+                            Toast.init(res.errorMsg);
+                            return;
+                        }
+                    });
                 }).on('blur paste', function () {
-                    if (!_this.id) return;
+                    if (!_this2.id) return;
                     if ($title.data('before') != $title.html()) {
                         $title.data('before', $title.html());
-                        _this._fulfilLayout();
-                        _this.$mask && _this.$mask.remove();
-                        _this.$mask = null;
-                        if (_this.id) {
-                            _this._edit($title.html(), $note.html());
+                        _this2._fulfilLayout();
+                        _this2.$mask && _this2.$mask.remove();
+                        _this2.$mask = null;
+                        if (_this2.id) {
+                            _this2._edit($title.html(), $note.html());
                         } else {
-                            _this._add($title.html(), $title.html());
+                            _this2._add($title.html(), $title.html());
                         }
                     }
                 });
@@ -10588,15 +10615,15 @@ var Note = function () {
 
         }, {
             key: '_add',
-            value: function _add(title, msg) {
-                var _this2 = this;
+            value: function _add(title, msg, author) {
+                var _this3 = this;
 
-                $.post('/api/notes/add', { title: title, note: msg }).then(function (res) {
+                $.post('/api/notes/add', { title: title, note: msg, author: author }).then(function (res) {
                     console.log(res);
                     if (res.status === 0) {
                         Toast.init('Add Success');
                     } else {
-                        _this2.$note.remove();
+                        _this3.$note.remove();
                         Event.fire('waterfall');
                         Toast.init(res.errorMsg);
                     }
@@ -10608,11 +10635,11 @@ var Note = function () {
         }, {
             key: '_delete',
             value: function _delete() {
-                var _this3 = this;
+                var _this4 = this;
 
                 $.post('/api/notes/delete', { id: this.id }).then(function (res) {
                     if (res.status === 0) {
-                        _this3.$note.remove();
+                        _this4.$note.remove();
                         Toast.init('Delete Success');
                         Event.fire('waterfall');
                     } else {
@@ -10635,7 +10662,6 @@ var Note = function () {
             //     }).catch(() => {
             //         console.log('xxxxxxxxxxx')
             //     });
-
             // }
 
             // 修改数据库内容
@@ -10655,6 +10681,9 @@ var Note = function () {
                     }
                 });
             }
+
+            // 获取用户信息
+
         }]);
 
         return _Note;
@@ -10881,7 +10910,8 @@ var NoteManager = function () {
                     Note.init({
                         id: note.id,
                         initContext: note.text,
-                        createTime: time
+                        createTime: time,
+                        author: note.author
                     });
                 });
                 Event.fire('waterfall');

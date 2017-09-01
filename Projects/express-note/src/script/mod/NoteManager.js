@@ -12,7 +12,8 @@ let NoteManager = (() => {
                         Note.init({
                             id: note.id,
                             initContext: note.text,
-                            createTime: time
+                            createTime: time,
+                            author: note.author
                         });
                     });
                     Event.fire('waterfall')
