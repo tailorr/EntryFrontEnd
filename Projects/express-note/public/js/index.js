@@ -10458,11 +10458,11 @@ var Note = function () {
             this.defaultOpts = {
                 id: '',
                 uid: '',
-                author: 'Passby',
+                author: 'Admin',
                 $ct: $('#content').length > 0 ? $('#content') : $('body'),
                 createTime: new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/),
                 initContext: 'Input your note here',
-                title: 'Input Your Title...'
+                title: 'Input your title...'
             };
             this._initOpts(opts);
             this._createNote();
@@ -10476,22 +10476,22 @@ var Note = function () {
                 // Object.assign()
                 this.id = this.opts.id ? this.opts.id : '';
                 this.uid = this.opts.uid ? this.opts.uid : '';
-                this.title = this.opts.title ? this.opts.title : 'Input your note here';
+                this.title = this.opts.title ? this.opts.title : 'Input your titlt...';
                 this.initContext = this.opts.initContext ? this.opts.initContext : 'Input your note here';
-                this.author = this.opts.author ? this.opts.author : 'Passerby';
+                this.author = this.opts.author ? this.opts.author : 'Admin';
                 this.createTime = this.opts.createTime ? this.opts.createTime : new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/);
             }
         }, {
             key: '_createNote',
             value: function _createNote() {
-                var _this = this;
-
-                $.get('/login').then(function (res) {
-                    _this.author = res.userInfo.username;
-                    console.log(_this.author);
-                });
-                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">' + this.title + '</div>\n                            <div class="note-content" contenteditable="true">' + this.initContext + '</div>\n                            <div class="note-footer">\n                                <span class="time">' + this.createTime + ' by ' + this.author + '</span>\n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
+                // $.get('/login').then(res => {
+                // this.author = res.userInfo.username
+                // console.log(res)
+                // })
+                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">' + this.title + '</div>\n                            <div class="note-content" contenteditable="true">' + this.initContext + '</div>\n                            <div class="time">' + this.createTime + ' by ' + this.author + '</div>\n                            <div class="note-footer">\n                                \n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
                 this.$note = $(tpl);
+                this.$note.find('.note-content').data('before', this.initContext);
+                this.$note.find('.note-header').data('before', this.title);
                 $('#content').append(this.$note);
                 this._initLayout();
 
@@ -10519,7 +10519,7 @@ var Note = function () {
         }, {
             key: '_bindEvent',
             value: function _bindEvent() {
-                var _this2 = this;
+                var _this = this;
 
                 var $title = this.$note.find('.note-header');
                 var $note = this.$note.find('.note-content');
@@ -10528,28 +10528,31 @@ var Note = function () {
 
                 //删除
                 $delete.on('click', function () {
-                    _this2._delete();
-                    if (!_this2.id) _this2.$note.remove();
-                    _this2.$mask && _this2.$mask.remove();
-                    _this2.$mask = null;
-                    _this2._fulfilLayout();
+                    _this._delete();
+                    if (!_this.id) _this.$note.remove();
+                    _this.$mask && _this.$mask.remove();
+                    _this.$mask = null;
+                    _this._fulfilLayout();
                 });
 
                 // 保存
                 $save.on('click', function () {
                     if ($note.text() === 'Input your note here' || $note.text() === '') {
-                        Toast.init("Please Enter Your Note");
+                        Toast.init("Please enter your note");
                         return;
                     }
+                    if ($title.text() === 'Input your title...' || $title.text() === '') {
+                        Toast.init("Please enter your title");
+                        return;
+                    }
+                    _this.$mask && _this.$mask.remove();
+                    _this.$mask = null;
+                    _this._fulfilLayout();
 
-                    _this2.$mask && _this2.$mask.remove();
-                    _this2.$mask = null;
-                    _this2._fulfilLayout();
-
-                    if (_this2.id) {
-                        _this2._edit($title.html(), $note.html());
+                    if (_this.id) {
+                        _this._edit($title.html(), $note.html());
                     } else {
-                        _this2._add($title.html(), $note.html());
+                        _this._add($title.html(), $note.html());
                     }
                 });
 
@@ -10559,71 +10562,69 @@ var Note = function () {
                         if (res.status === 0) {
                             if ($note.text() === 'Input your note here') $note.html('');
                             $note.data('before', $note.html());
-                            _this2.$mask = _this2.$mask ? _this2.$mask : Mask.init();
-                            _this2._initLayout();
+                            _this.$mask = _this.$mask ? _this.$mask : Mask.init();
+                            _this._initLayout();
                         } else {
                             Toast.init(res.errorMsg);
                             return;
                         }
                     });
                 }).on('blur paste', function () {
-                    if (!_this2.id) return;
+                    if (!_this.id) return;
                     if ($note.data('before') != $note.html()) {
                         $note.data('before', $note.html());
-                        _this2._fulfilLayout();
-                        _this2.$mask && _this2.$mask.remove();
-                        _this2.$mask = null;
-                        if (_this2.id) {
-                            _this2._edit($title.html(), $note.html());
+                        _this._fulfilLayout();
+                        _this.$mask && _this.$mask.remove();
+                        _this.$mask = null;
+                        if (_this.id) {
+                            _this._edit($title.html(), $note.html());
                         } else {
-                            _this2._add($title.html(), $note.html());
+                            _this._add($title.html(), $note.html());
                         }
                     }
                 });
 
                 $title.on('focus', function () {
                     $.get('/login').then(function (res) {
-                        console.log(res);
                         if (res.status === 0) {
-                            if ($title.text() === 'Input Your Title...') $title.html('');
+                            if ($title.text() === 'Input your title...') $title.html('');
                             $title.data('before', $title.html());
-                            _this2.$mask = _this2.$mask ? _this2.$mask : Mask.init();
-                            _this2._initLayout();
+                            _this.$mask = _this.$mask ? _this.$mask : Mask.init();
+                            _this._initLayout();
                         } else {
                             Toast.init(res.errorMsg);
                             return;
                         }
                     });
                 }).on('blur paste', function () {
-                    if (!_this2.id) return;
+                    if (!_this.id) return;
                     if ($title.data('before') != $title.html()) {
                         $title.data('before', $title.html());
-                        _this2._fulfilLayout();
-                        _this2.$mask && _this2.$mask.remove();
-                        _this2.$mask = null;
-                        if (_this2.id) {
-                            _this2._edit($title.html(), $note.html());
+                        _this._fulfilLayout();
+                        _this.$mask && _this.$mask.remove();
+                        _this.$mask = null;
+                        if (_this.id) {
+                            _this._edit($title.html(), $note.html());
                         } else {
-                            _this2._add($title.html(), $title.html());
+                            _this._add($title.html(), $note.html());
                         }
                     }
                 });
             }
 
-            /* ---------------------------以下是数据库的相关操作----------------------------- */
+            /* ---------------------------  以下是数据库的相关操作  ----------------------------- */
             //存储到数据库
 
         }, {
             key: '_add',
-            value: function _add(title, msg, author) {
-                var _this3 = this;
+            value: function _add(title, note) {
+                var _this2 = this;
 
-                $.post('/api/notes/add', { title: title, note: msg, author: author }).then(function (res) {
-                    console.log(res);
+                $.post('/api/notes/add', { title: title, note: note }).then(function (res) {
                     if (res.status === 0) {
-                        Toast.init('Add Success');
+                        Toast.init(res.successMsg);
                     } else {
-                        _this3.$note.remove();
+                        _this2.$note.remove();
                         Event.fire('waterfall');
                         Toast.init(res.errorMsg);
                     }
@@ -10635,34 +10636,18 @@ var Note = function () {
         }, {
             key: '_delete',
             value: function _delete() {
-                var _this4 = this;
+                var _this3 = this;
 
                 $.post('/api/notes/delete', { id: this.id }).then(function (res) {
                     if (res.status === 0) {
-                        _this4.$note.remove();
-                        Toast.init('Delete Success');
+                        _this3.$note.remove();
+                        Toast.init(res.successMsg);
                         Event.fire('waterfall');
                     } else {
                         Toast.init(res.errorMsg);
                     }
-                }).catch(function () {
-                    console.log('xxxxxxxxxxx');
                 });
             }
-
-            // _empty() {
-            //     $.post('/api/notes/empty', { uid: this.uid }).then(res => {
-            //         console.log(this.uid)
-            //         if (res.status === 0) {
-            //             // this.$note.remove()
-            //             Toast.init('Empty Success')
-            //         } else {
-            //             Toast.init(res.errorMsg);
-            //         }
-            //     }).catch(() => {
-            //         console.log('xxxxxxxxxxx')
-            //     });
-            // }
 
             // 修改数据库内容
 
@@ -10675,15 +10660,12 @@ var Note = function () {
                     note: msg
                 }).then(function (res) {
                     if (res.status === 0) {
-                        Toast.init('Update Success');
+                        Toast.init(res.successMsg);
                     } else {
                         Toast.init(res.errorMsg);
                     }
                 });
             }
-
-            // 获取用户信息
-
         }]);
 
         return _Note;
@@ -10909,13 +10891,14 @@ var NoteManager = function () {
                     var time = note.createdAt.match(timeRegex);
                     Note.init({
                         id: note.id,
+                        title: note.title,
                         initContext: note.text,
                         createTime: time,
                         author: note.author
                     });
                 });
                 Event.fire('waterfall');
-                Toast.init('Welcome To Visit');
+                Toast.init(res.successMsg);
             } else {
                 Toast.init(res.errorMsg);
             }
@@ -10925,23 +10908,29 @@ var NoteManager = function () {
     }
 
     function empty() {
-        var _this = this;
-
         $.post('/api/notes/empty').then(function (res) {
-            console.log(res);
             if (res.status === 0) {
-                _this.$note.remove();
-                Toast.init('Empty Success');
+                // this.$note.remove()
+                Toast.init(res.successMsg);
             } else {
                 Toast.init(res.errorMsg);
             }
         }).catch(function () {
-            console.log('Network Anomaly');
+            Toast.init('Network Anomaly');
         });
     }
 
     function add() {
-        Note.init();
+        $.get('/login').then(function (res) {
+            if (res.status === 0) {
+                Note.init({
+                    author: res.userInfo.username
+                });
+            } else {
+                // Note.init()
+                Toast.init(res.errorMsg);
+            }
+        });
     }
 
     return {

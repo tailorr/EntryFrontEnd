@@ -11,11 +11,11 @@ let Note = (() => {
             this.defaultOpts = {
                 id: '',
                 uid: '',
-                author: 'Passby',
+                author: 'Admin',
                 $ct: $('#content').length > 0 ? $('#content') : $('body'),
                 createTime: new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/),
                 initContext: 'Input your note here',
-                title: 'Input Your Title...'
+                title: 'Input your title...'
             }
             this._initOpts(opts)
             this._createNote()
@@ -27,27 +27,30 @@ let Note = (() => {
                 // Object.assign()
             this.id = this.opts.id ? this.opts.id : ''
             this.uid = this.opts.uid ? this.opts.uid : ''
-            this.title = this.opts.title ? this.opts.title : 'Input your note here'
+            this.title = this.opts.title ? this.opts.title : 'Input your titlt...'
             this.initContext = this.opts.initContext ? this.opts.initContext : 'Input your note here'
-            this.author = this.opts.author ? this.opts.author : 'Passerby'
+            this.author = this.opts.author ? this.opts.author : 'Admin'
             this.createTime = this.opts.createTime ? this.opts.createTime : new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/)
         }
 
         _createNote() {
-            $.get('/login').then(res => {
-                this.author = res.userInfo.username
-                console.log(this.author)
-            })
+            // $.get('/login').then(res => {
+            // this.author = res.userInfo.username
+            // console.log(res)
+            // })
             let tpl = `<div class="note">
                             <div class="note-header" contenteditable="true">${this.title}</div>
                             <div class="note-content" contenteditable="true">${this.initContext}</div>
+                            <div class="time">${this.createTime} by ${this.author}</div>
                             <div class="note-footer">
-                                <span class="time">${this.createTime} by ${this.author}</span>
+                                
                                 <button class="save">Save</button>
                             </div>
                             <i class="delete">&#xe70c;</i>
                        </div>`
             this.$note = $(tpl)
+            this.$note.find('.note-content').data('before', this.initContext)
+            this.$note.find('.note-header').data('before', this.title)
             $('#content').append(this.$note)
             this._initLayout()
 
@@ -86,10 +89,13 @@ let Note = (() => {
             // 保存
             $save.on('click', () => {
                 if ($note.text() === 'Input your note here' || $note.text() === '') {
-                    Toast.init("Please Enter Your Note")
+                    Toast.init("Please enter your note")
                     return
                 }
-
+                if ($title.text() === 'Input your title...' || $title.text() === '') {
+                    Toast.init("Please enter your title")
+                    return
+                }
                 this.$mask && this.$mask.remove()
                 this.$mask = null
                 this._fulfilLayout()
@@ -131,9 +137,8 @@ let Note = (() => {
 
             $title.on('focus', () => {
                 $.get('/login').then(res => {
-                    console.log(res)
                     if (res.status === 0) {
-                        if ($title.text() === 'Input Your Title...') $title.html('')
+                        if ($title.text() === 'Input your title...') $title.html('')
                         $title.data('before', $title.html())
                         this.$mask = this.$mask ? this.$mask : Mask.init()
                         this._initLayout()
@@ -159,12 +164,12 @@ let Note = (() => {
             })
         }
 
-        /* ---------------------------以下是数据库的相关操作----------------------------- */
+        /* ---------------------------  以下是数据库的相关操作  ----------------------------- */
         //存储到数据库
-        _add(title, msg, author) {
-            $.post('/api/notes/add', { title: title, note: msg, author: author }).then(res => {
+        _add(title, note) {
+            $.post('/api/notes/add', { title: title, note: note }).then(res => {
                 if (res.status === 0) {
-                    Toast.init('Add Success')
+                    Toast.init(res.successMsg)
                 } else {
                     this.$note.remove()
                     Event.fire('waterfall')
@@ -178,29 +183,13 @@ let Note = (() => {
             $.post('/api/notes/delete', { id: this.id }).then(res => {
                 if (res.status === 0) {
                     this.$note.remove()
-                    Toast.init('Delete Success')
+                    Toast.init(res.successMsg)
                     Event.fire('waterfall')
                 } else {
                     Toast.init(res.errorMsg);
                 }
-            }).catch(() => {
-                console.log('xxxxxxxxxxx')
             })
         }
-
-        // _empty() {
-        //     $.post('/api/notes/empty', { uid: this.uid }).then(res => {
-        //         console.log(this.uid)
-        //         if (res.status === 0) {
-        //             // this.$note.remove()
-        //             Toast.init('Empty Success')
-        //         } else {
-        //             Toast.init(res.errorMsg);
-        //         }
-        //     }).catch(() => {
-        //         console.log('xxxxxxxxxxx')
-        //     });
-        // }
 
         // 修改数据库内容
         _edit(title, msg) {
@@ -210,15 +199,12 @@ let Note = (() => {
                 note: msg
             }).then(res => {
                 if (res.status === 0) {
-                    Toast.init('Update Success');
+                    Toast.init(res.successMsg);
                 } else {
                     Toast.init(res.errorMsg);
                 }
             })
         }
-
-
-        // 获取用户信息
     }
 
     return {

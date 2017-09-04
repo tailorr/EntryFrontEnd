@@ -8,16 +8,17 @@ let NoteManager = (() => {
         $.get('/api/notes').then(res => {
                 if (res.status === 0) {
                     $.each(res.data, (index, note) => {
-                        var time = note.createdAt.match(timeRegex)
+                        let time = note.createdAt.match(timeRegex)
                         Note.init({
                             id: note.id,
+                            title: note.title,
                             initContext: note.text,
                             createTime: time,
                             author: note.author
                         });
                     });
                     Event.fire('waterfall')
-                    Toast.init('Welcome To Visit')
+                    Toast.init(res.successMsg)
                 } else {
                     Toast.init(res.errorMsg)
                 }
@@ -28,23 +29,30 @@ let NoteManager = (() => {
     }
 
     function empty() {
-
         $.post('/api/notes/empty').then(res => {
-            console.log(res)
             if (res.status === 0) {
-                this.$note.remove()
-                Toast.init('Empty Success')
+                // this.$note.remove()
+                Toast.init(res.successMsg)
             } else {
-                Toast.init(res.errorMsg);
+                Toast.init(res.errorMsg)
             }
         }).catch(() => {
-            console.log('Network Anomaly')
+            Toast.init('Network Anomaly')
         });
 
     }
 
     function add() {
-        Note.init()
+        $.get('/login').then(res => {
+            if (res.status === 0) {
+                Note.init({
+                    author: res.userInfo.username
+                })
+            } else {
+                // Note.init()
+                Toast.init(res.errorMsg)
+            }
+        })
     }
 
     return {

@@ -14,28 +14,29 @@ router.get('/notes', (req, res, next) => {
     var opts = { raw: true }
     if (req.session && req.session.user) {
         opts.where = { uid: req.session.user.id }
+        var username = req.session.user.username
     }
-    var user = req.session.user
+
+    successMsg = username ? `Welcome back, ${username}` : `Welcome to visit`
     Note.findAll(opts).then((notes) => {
-        res.send({ status: 0, data: notes, uerInfo: user });
+        res.send({ status: 0, data: notes, successMsg: successMsg });
     }).catch(() => {
-        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
+        res.send({ status: 1, errorMsg: 'You have no note' });
     })
 })
 
 router.post('/notes/add', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: 'Please Login First' })
+        return res.send({ status: 1, errorMsg: 'Please login first' })
     }
     if (!req.body.note) {
-        return res.send({ status: 2, errorMsg: 'Please Enter Your Note' });
+        return res.send({ status: 2, errorMsg: 'Please enter your note' });
     }
 
     var note = req.body.note
     var title = req.body.title
     var uid = req.session.user.id
-        // var noteId = req.body.id;
-    var user = req.session.user
+    var author = req.session.user.username
 
     Note.create({
         title: title,
@@ -43,15 +44,15 @@ router.post('/notes/add', (req, res, next) => {
         uid: uid,
         author: author
     }).then(() => {
-        res.send({ status: 0 })
+        res.send({ status: 0, successMsg: 'Add success' })
     }).catch(function() {
-        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
+        res.send({ status: 1, errorMsg: 'Database exception or you have no permissions' });
     })
 })
 
 router.post('/notes/edit', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: 'Please Login First' })
+        return res.send({ status: 1, errorMsg: 'Please login first' })
     }
 
     var noteId = req.body.id;
@@ -60,42 +61,39 @@ router.post('/notes/edit', (req, res, next) => {
     var uid = req.session.user.id;
 
     Note.update({ title: title, text: note }, { where: { id: noteId, uid: uid } }).then(() => {
-        res.send({ status: 0 })
+        res.send({ status: 0, successMsg: 'Update success' })
     }).catch(() => {
-        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' })
+        res.send({ status: 1, errorMsg: 'Database exception or you have no permissions' })
     })
 })
 
 router.post('/notes/delete', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: 'Please Login First' })
+        return res.send({ status: 1, errorMsg: 'Please login first' })
     }
 
     var noteId = req.body.id
     var uid = req.session.user.id;
 
     Note.destroy({ where: { id: noteId, uid: uid } }).then(() => {
-        res.send({ status: 0 })
+        res.send({ status: 0, successMsg: 'Delete success' })
     }).catch(() => {
-        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
+        res.send({ status: 1, errorMsg: 'Database exception or you have no permissions' });
     })
 
 })
+
 router.post('/notes/empty', (req, res, next) => {
     if (!req.session || !req.session.user) {
-        return res.send({ status: 1, errorMsg: 'Please Login First' })
+        return res.send({ status: 1, errorMsg: 'Please login first' })
     }
 
-    var user = req.session.user
-
-    console.log('empty...........................................................')
-    console.log(user)
-    console.log('empty...........................................................')
+    var uid = req.session.user.id
 
     Note.drop({ where: { uid: uid } }).then(() => {
-        res.send({ status: 0, uerInfo: user })
+        res.send({ status: 0, successMsg: 'Empty success' })
     }).catch(() => {
-        res.send({ status: 1, errorMsg: 'Database Exception Or Uou Have No Permissions' });
+        res.send({ status: 1, errorMsg: 'Database exception or you have no permissions' });
     })
 })
 

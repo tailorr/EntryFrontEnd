@@ -1,15 +1,3 @@
-.toast {
-  position: fixed;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  -ms-transform: translateX(-50%);
-  transform: translateX(-50%);
-  top: 10px;
-  font-size: 16px;
-  color: #D75455;
-  padding: 5px 10px;
-  display: none;
-  z-index: 1001; }
 html,
 body {
   margin: 0;
@@ -33,7 +21,7 @@ a {
   color: #0B1013; }
 
 #header {
-  padding: 5px 20px;
+  padding: 0 20px;
   background: #fafafa;
   border-bottom: 1px solid #EBEDF1; }
   #header:after {
@@ -124,6 +112,19 @@ a {
     width: 0; }
   to {
     width: 100px; } }
+.toast {
+  position: fixed;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  top: 0;
+  line-height: 50px;
+  font-size: 16px;
+  color: #D75455;
+  padding: 5px 10px;
+  display: none;
+  z-index: 1001; }
 @font-face {
   font-family: 'close';
   /* project id 397710 */
@@ -140,9 +141,10 @@ a {
   box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 3px 5px rgba(0, 0, 0, 0.1); }
   .note .note-header {
     padding-left: 10px;
+    padding-right: 10px;
     background: #D75455;
     font: 14px/30px Helvetica, arial, sans-serif;
-    color: #A9A9A9;
+    color: #fff;
     -webkit-tap-highlight-color: transparent;
     outline: 0;
     cursor: pointer; }
@@ -152,20 +154,19 @@ a {
     padding: 20px;
     min-height: 60px;
     background: rgba(255, 255, 255, 0.3);
-    border-top: 1px solid #EBEDF1;
-    border-bottom: 1px solid #EBEDF1;
-    font: 16px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
+    font: 14px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
     color: #A9A9A9;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-modify: read-write-plaintext-only;
     outline: 0; }
+  .note .time {
+    border-bottom: 1px solid #EBEDF1;
+    text-align: right;
+    padding-right: 20px;
+    font: 14px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
+    color: #EBEDF1; }
   .note .note-footer {
     font: 12px/30px Helvetica, arial, \5b8b\4f53, sans-serif; }
-    .note .note-footer .time {
-      float: left;
-      width: 70%;
-      text-indent: 10px;
-      color: #DADADA; }
     .note .note-footer .save {
       float: right;
       width: 30%;
