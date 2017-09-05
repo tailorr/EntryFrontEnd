@@ -13,47 +13,61 @@
     transition: all 1s;
     background: #fff;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1), 0 3px 5px rgba(0, 0, 0, 0.1);
+    font: 14px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
     .note-header {
-        padding-left: 10px;
-        padding-right: 10px;
+        line-height: 30px;
         background: #D75455;
-        font: 14px/30px Helvetica, arial, sans-serif;
-        color: #fff;
-        -webkit-tap-highlight-color: transparent;
-        outline: 0;
-        cursor: pointer;
+        color: #F0F0F0;
         &:hover {
             background: #CB4042;
+        }
+        .title {
+            float: left;
+            padding-left: 10px;
+            width: 125px;
+            -webkit-tap-highlight-color: transparent;
+            outline: 0;
+        }
+        .drag {
+            float: left;
+            width: 115px;
+            height: 30px;
+            cursor: move;
+        }
+        &:after {
+            content: "";
+            display: table;
+            clear: both;
         }
     }
     .note-content {
         padding: 20px;
         min-height: 60px;
         background: rgba(255, 255, 255, 0.3);
-        // border-top: 1px solid #EBEDF1;
-        // border-bottom: 1px solid #EBEDF1;
-        font: 14px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
         color: #A9A9A9;
         -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
         -webkit-user-modify: read-write-plaintext-only;
         outline: 0;
     }
-    .time {
+    .note-info {
+        padding-bottom: 6px;
         border-bottom: 1px solid #EBEDF1;
-        text-align: right;
-        padding-right: 20px;
-        font: 14px/26px Helvetica, arial, \5b8b\4f53, sans-serif;
-        color: #EBEDF1;
+        line-height: 20px;
+        .time,
+        .author {
+            text-align: right;
+            padding-right: 20px;
+            color: #D6D6D6;
+        }
     }
     .note-footer {
-        font: 12px/30px Helvetica, arial, \5b8b\4f53, sans-serif;
         .save {
             float: right;
             width: 30%;
             height: 30px;
             border: none;
             background: rgba(255, 255, 255, 0.3);
-            color: #A9A9A9;
+            color: #888888;
             cursor: pointer;
             &:hover {
                 background: #e9e9e9;
@@ -70,8 +84,8 @@
     }
     .delete {
         position: absolute;
-        right: 7px;
-        top: 7px;
+        right: 6px;
+        top: 0;
         font-family: "close" !important;
         font-size: 12px;
         font-style: normal;

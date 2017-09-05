@@ -5,7 +5,6 @@ const sequelize = new Sequelize(undefined, undefined, undefined, {
         host: 'localhost',
         dialect: 'sqlite',
 
-
         // SQLite only
         storage: path.join(__dirname, '../database/database.sqlite')
     })

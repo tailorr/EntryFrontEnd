@@ -25,7 +25,7 @@ let Mask = (() => {
             })
         }
         remove() {
-            this.$mask.fadeOut(500, () => {
+            this.$mask.fadeOut(400, () => {
                 this.$mask.remove()
             })
         }

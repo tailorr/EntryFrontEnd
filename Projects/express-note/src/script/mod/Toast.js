@@ -2,7 +2,7 @@ require('scss/toast.scss')
 
 let Toast = (() => {
     class _Toast {
-        constructor(message = '添加成功', time = 1000) {
+        constructor(message = 'Add success', time = 800) {
             this.message = message
             this.vanishTime = time
             this.createToast()

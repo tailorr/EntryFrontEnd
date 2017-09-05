@@ -1,9 +1,10 @@
 require('scss/note.scss')
 
-let Waterfall = require('mod/Waterfall')
-let Event = require('mod/Event')
-let Toast = require('mod/Toast')
-let Mask = require('mod/Mask')
+const Waterfall = require('mod/Waterfall')
+const Event = require('mod/Event')
+const Toast = require('mod/Toast')
+const Mask = require('mod/Mask')
+const Drag = require('mod/Drag')
 
 let Note = (() => {
     class _Note {
@@ -21,29 +22,29 @@ let Note = (() => {
             this._createNote()
             this._bindEvent()
         }
-
         _initOpts(opts) {
             this.opts = $.extend({}, this.defaultOpts, opts || {})
                 // Object.assign()
             this.id = this.opts.id ? this.opts.id : ''
             this.uid = this.opts.uid ? this.opts.uid : ''
-            this.title = this.opts.title ? this.opts.title : 'Input your titlt...'
+            this.title = this.opts.title ? this.opts.title : 'Input your title...'
+            this.$ct = this.opts.$ct ? this.opts.$ct : $('#content').length > 0 ? $('#content') : $('body')
             this.initContext = this.opts.initContext ? this.opts.initContext : 'Input your note here'
             this.author = this.opts.author ? this.opts.author : 'Admin'
             this.createTime = this.opts.createTime ? this.opts.createTime : new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/)
         }
-
         _createNote() {
-            // $.get('/login').then(res => {
-            // this.author = res.userInfo.username
-            // console.log(res)
-            // })
             let tpl = `<div class="note">
-                            <div class="note-header" contenteditable="true">${this.title}</div>
+                            <div class="note-header">
+                                <div class="title" contenteditable="true">${this.title}</div>
+                                <div class="drag"></div>
+                            </div>
                             <div class="note-content" contenteditable="true">${this.initContext}</div>
-                            <div class="time">${this.createTime} by ${this.author}</div>
-                            <div class="note-footer">
-                                
+                            <div class="note-info">
+                                <div class="author">${this.author}</div>
+                                <div class="time">${this.createTime}</div>
+                            </div>
+                            <div class="note-footer">                       
                                 <button class="save">Save</button>
                             </div>
                             <i class="delete">&#xe70c;</i>
@@ -51,7 +52,7 @@ let Note = (() => {
             this.$note = $(tpl)
             this.$note.find('.note-content').data('before', this.initContext)
             this.$note.find('.note-header').data('before', this.title)
-            $('#content').append(this.$note)
+            this.$ct.append(this.$note)
             this._initLayout()
 
             if (!this.id) {
@@ -72,7 +73,8 @@ let Note = (() => {
             Event.fire('waterfall');
         }
         _bindEvent() {
-            let $title = this.$note.find('.note-header')
+            let $title = this.$note.find('.title')
+            let $drag = this.$note.find('.drag')
             let $note = this.$note.find('.note-content')
             let $delete = this.$note.find('.delete')
             let $save = this.$note.find('.save')
@@ -135,7 +137,8 @@ let Note = (() => {
                 }
             })
 
-            $title.on('focus', () => {
+            $title.on('focus', e => {
+                // e.stopPropagation()
                 $.get('/login').then(res => {
                     if (res.status === 0) {
                         if ($title.text() === 'Input your title...') $title.html('')
@@ -162,6 +165,18 @@ let Note = (() => {
                     }
                 }
             })
+
+            $drag.on('mousedown', () => {
+                this.$note.css({
+                    'transition': 'none'
+                })
+                Drag.init(this.$note)
+                console.log(Drag.init(this.$note))
+            }).on('mouseup', () => {
+                this.$note.css({
+                    'transition': 'all 1s'
+                })
+            })
         }
 
         /* ---------------------------  以下是数据库的相关操作  ----------------------------- */
@@ -174,19 +189,6 @@ let Note = (() => {
                     this.$note.remove()
                     Event.fire('waterfall')
                     Toast.init(res.errorMsg)
-                }
-            })
-        }
-
-        //从数据库删除
-        _delete() {
-            $.post('/api/notes/delete', { id: this.id }).then(res => {
-                if (res.status === 0) {
-                    this.$note.remove()
-                    Toast.init(res.successMsg)
-                    Event.fire('waterfall')
-                } else {
-                    Toast.init(res.errorMsg);
                 }
             })
         }
@@ -205,11 +207,28 @@ let Note = (() => {
                 }
             })
         }
+
+        //从数据库删除
+        _delete() {
+            $.post('/api/notes/delete', { id: this.id }).then(res => {
+                if (res.status === 0) {
+                    this.$note.remove()
+                    Toast.init(res.successMsg)
+                    Event.fire('waterfall')
+                } else {
+                    Toast.init(res.errorMsg);
+                }
+            })
+        }
     }
 
     return {
         init: (opts) => {
             new _Note(opts)
+        },
+        empty: () => {
+            let $ct = $('#content').length > 0 ? $('#content') : $('body')
+            $ct.empty()
         }
     }
 })()

@@ -1,10 +1,10 @@
 require('scss/index.scss')
 
-let Toast = require('mod/Toast')
-let Note = require('mod/Note')
-let NoteManager = require('mod/NoteManager')
-let WaterFall = require('mod/Waterfall')
-let Event = require('mod/Event')
+const Toast = require('mod/Toast')
+const Note = require('mod/Note')
+const NoteManager = require('mod/NoteManager')
+const WaterFall = require('mod/Waterfall')
+const Event = require('mod/Event')
 
 NoteManager.load()
 

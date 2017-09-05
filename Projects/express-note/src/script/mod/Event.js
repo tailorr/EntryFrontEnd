@@ -1,14 +1,11 @@
 let EventCenter = (() => {
-
     let events = {}
-
     let on = (evt, handler) => {
         events[evt] = events[evt] || []
         events[evt].push({
             handler: handler
         })
     }
-
     let fire = (evt, args) => {
         if (!events[evt]) {
             return
@@ -17,7 +14,6 @@ let EventCenter = (() => {
             events[evt][i].handler(args)
         }
     }
-
     return {
         on: on,
         fire: fire

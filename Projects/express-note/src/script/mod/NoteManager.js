@@ -3,8 +3,8 @@ const Note = require('./Note')
 const Event = require('./Event')
 
 let NoteManager = (() => {
-    function load() {
-        var timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/
+    let load = () => {
+        let timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/
         $.get('/api/notes').then(res => {
                 if (res.status === 0) {
                     $.each(res.data, (index, note) => {
@@ -25,24 +25,23 @@ let NoteManager = (() => {
             })
             .catch(() => {
                 Toast.init('Network Anomaly')
-            });
+            })
     }
 
-    function empty() {
+    let empty = () => {
         $.post('/api/notes/empty').then(res => {
             if (res.status === 0) {
-                // this.$note.remove()
+                Note.empty()
                 Toast.init(res.successMsg)
             } else {
                 Toast.init(res.errorMsg)
             }
         }).catch(() => {
             Toast.init('Network Anomaly')
-        });
-
+        })
     }
 
-    function add() {
+    let add = () => {
         $.get('/login').then(res => {
             if (res.status === 0) {
                 Note.init({
@@ -61,6 +60,6 @@ let NoteManager = (() => {
         empty: empty
     }
 
-})();
+})()
 
 module.exports = NoteManager

@@ -10339,8 +10339,8 @@ __webpack_require__(7);
 var Toast = function () {
     var _Toast = function () {
         function _Toast() {
-            var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '添加成功';
-            var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
+            var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'Add success';
+            var time = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 800;
 
             _classCallCheck(this, _Toast);
 
@@ -10394,16 +10394,13 @@ module.exports = Toast;
 
 
 var EventCenter = function () {
-
     var events = {};
-
     var on = function on(evt, handler) {
         events[evt] = events[evt] || [];
         events[evt].push({
             handler: handler
         });
     };
-
     var fire = function fire(evt, args) {
         if (!events[evt]) {
             return;
@@ -10412,7 +10409,6 @@ var EventCenter = function () {
             events[evt][i].handler(args);
         }
     };
-
     return {
         on: on,
         fire: fire
@@ -10449,6 +10445,7 @@ var Waterfall = __webpack_require__(4);
 var Event = __webpack_require__(2);
 var Toast = __webpack_require__(1);
 var Mask = __webpack_require__(9);
+var Drag = __webpack_require__(10);
 
 var Note = function () {
     var _Note = function () {
@@ -10476,7 +10473,8 @@ var Note = function () {
                 // Object.assign()
                 this.id = this.opts.id ? this.opts.id : '';
                 this.uid = this.opts.uid ? this.opts.uid : '';
-                this.title = this.opts.title ? this.opts.title : 'Input your titlt...';
+                this.title = this.opts.title ? this.opts.title : 'Input your title...';
+                this.$ct = this.opts.$ct ? this.opts.$ct : $('#content').length > 0 ? $('#content') : $('body');
                 this.initContext = this.opts.initContext ? this.opts.initContext : 'Input your note here';
                 this.author = this.opts.author ? this.opts.author : 'Admin';
                 this.createTime = this.opts.createTime ? this.opts.createTime : new Date().toISOString().match(/^\d{4}-\d{1,2}-\d{1,2}/);
@@ -10484,15 +10482,11 @@ var Note = function () {
         }, {
             key: '_createNote',
             value: function _createNote() {
-                // $.get('/login').then(res => {
-                // this.author = res.userInfo.username
-                // console.log(res)
-                // })
-                var tpl = '<div class="note">\n                            <div class="note-header" contenteditable="true">' + this.title + '</div>\n                            <div class="note-content" contenteditable="true">' + this.initContext + '</div>\n                            <div class="time">' + this.createTime + ' by ' + this.author + '</div>\n                            <div class="note-footer">\n                                \n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
+                var tpl = '<div class="note">\n                            <div class="note-header">\n                                <div class="title" contenteditable="true">' + this.title + '</div>\n                                <div class="drag"></div>\n                            </div>\n                            <div class="note-content" contenteditable="true">' + this.initContext + '</div>\n                            <div class="note-info">\n                                <div class="author">' + this.author + '</div>\n                                <div class="time">' + this.createTime + '</div>\n                            </div>\n                            <div class="note-footer">                       \n                                <button class="save">Save</button>\n                            </div>\n                            <i class="delete">&#xe70c;</i>\n                       </div>';
                 this.$note = $(tpl);
                 this.$note.find('.note-content').data('before', this.initContext);
                 this.$note.find('.note-header').data('before', this.title);
-                $('#content').append(this.$note);
+                this.$ct.append(this.$note);
                 this._initLayout();
 
                 if (!this.id) {
@@ -10521,7 +10515,8 @@ var Note = function () {
             value: function _bindEvent() {
                 var _this = this;
 
-                var $title = this.$note.find('.note-header');
+                var $title = this.$note.find('.title');
+                var $drag = this.$note.find('.drag');
                 var $note = this.$note.find('.note-content');
                 var $delete = this.$note.find('.delete');
                 var $save = this.$note.find('.save');
@@ -10584,7 +10579,8 @@ var Note = function () {
                     }
                 });
 
-                $title.on('focus', function () {
+                $title.on('focus', function (e) {
+                    // e.stopPropagation()
                     $.get('/login').then(function (res) {
                         if (res.status === 0) {
                             if ($title.text() === 'Input your title...') $title.html('');
@@ -10610,6 +10606,18 @@ var Note = function () {
                         }
                     }
                 });
+
+                $drag.on('mousedown', function () {
+                    _this.$note.css({
+                        'transition': 'none'
+                    });
+                    Drag.init(_this.$note);
+                    console.log(Drag.init(_this.$note));
+                }).on('mouseup', function () {
+                    _this.$note.css({
+                        'transition': 'all 1s'
+                    });
+                });
             }
 
             /* ---------------------------  以下是数据库的相关操作  ----------------------------- */
@@ -10626,24 +10634,6 @@ var Note = function () {
                     } else {
                         _this2.$note.remove();
                         Event.fire('waterfall');
-                        Toast.init(res.errorMsg);
-                    }
-                });
-            }
-
-            //从数据库删除
-
-        }, {
-            key: '_delete',
-            value: function _delete() {
-                var _this3 = this;
-
-                $.post('/api/notes/delete', { id: this.id }).then(function (res) {
-                    if (res.status === 0) {
-                        _this3.$note.remove();
-                        Toast.init(res.successMsg);
-                        Event.fire('waterfall');
-                    } else {
                         Toast.init(res.errorMsg);
                     }
                 });
@@ -10666,6 +10656,24 @@ var Note = function () {
                     }
                 });
             }
+
+            //从数据库删除
+
+        }, {
+            key: '_delete',
+            value: function _delete() {
+                var _this3 = this;
+
+                $.post('/api/notes/delete', { id: this.id }).then(function (res) {
+                    if (res.status === 0) {
+                        _this3.$note.remove();
+                        Toast.init(res.successMsg);
+                        Event.fire('waterfall');
+                    } else {
+                        Toast.init(res.errorMsg);
+                    }
+                });
+            }
         }]);
 
         return _Note;
@@ -10674,6 +10682,10 @@ var Note = function () {
     return {
         init: function init(opts) {
             new _Note(opts);
+        },
+        empty: function empty() {
+            var $ct = $('#content').length > 0 ? $('#content') : $('body');
+            $ct.empty();
         }
     };
 }();
@@ -10767,7 +10779,7 @@ __webpack_require__(6);
 
 var Toast = __webpack_require__(1);
 var Note = __webpack_require__(3);
-var NoteManager = __webpack_require__(10);
+var NoteManager = __webpack_require__(11);
 var WaterFall = __webpack_require__(4);
 var Event = __webpack_require__(2);
 
@@ -10852,7 +10864,7 @@ var Mask = function () {
             value: function remove() {
                 var _this = this;
 
-                this.$mask.fadeOut(500, function () {
+                this.$mask.fadeOut(400, function () {
                     _this.$mask.remove();
                 });
             }
@@ -10878,12 +10890,91 @@ module.exports = Mask;
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Drag = function () {
+    var _Drag = function () {
+        function _Drag($obj) {
+            _classCallCheck(this, _Drag);
+
+            this.$obj = $obj;
+            this.disX = 0;
+            this.disY = 0;
+            this._bindevent();
+        }
+
+        _createClass(_Drag, [{
+            key: '_down',
+            value: function _down(e) {
+                this.disX = e.pageX - this.$obj.offset().left;
+                this.disY = e.pageY - this.$obj.offset().top;
+            }
+        }, {
+            key: '_move',
+            value: function _move(e) {
+                this.$obj.offset({
+                    left: e.pageX - this.disX,
+                    top: e.pageY - this.disY
+                });
+            }
+        }, {
+            key: '_up',
+            value: function _up(e) {
+                $(document).off('mousemove');
+                $(document).off('onmouseup');
+            }
+        }, {
+            key: '_bindevent',
+            value: function _bindevent() {
+                var _this = this;
+
+                this.$obj.on('mousedown', function (e) {
+                    _this._down(e);
+                    $(document).on('mousemove', function (e) {
+                        _this._move(e);
+                    });
+                    $(document).on('mouseup', function () {
+                        _this._up();
+                    });
+                    return false;
+                });
+            }
+        }]);
+
+        return _Drag;
+    }();
+
+    var init = function init($obj) {
+        $obj.each(function () {
+            var $this = $(undefined);
+            if ($this.hasClass('init')) return;
+            return new _Drag($obj);
+            $this.addClass('init');
+        });
+    };
+    return {
+        init: init
+    };
+}();
+window.Drag = Drag;
+module.exports = Drag;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function($) {
+
 var Toast = __webpack_require__(1);
 var Note = __webpack_require__(3);
 var Event = __webpack_require__(2);
 
 var NoteManager = function () {
-    function load() {
+    var load = function load() {
         var timeRegex = /^\d{4}-\d{1,2}-\d{1,2}/;
         $.get('/api/notes').then(function (res) {
             if (res.status === 0) {
@@ -10905,12 +10996,12 @@ var NoteManager = function () {
         }).catch(function () {
             Toast.init('Network Anomaly');
         });
-    }
+    };
 
-    function empty() {
+    var empty = function empty() {
         $.post('/api/notes/empty').then(function (res) {
             if (res.status === 0) {
-                // this.$note.remove()
+                Note.empty();
                 Toast.init(res.successMsg);
             } else {
                 Toast.init(res.errorMsg);
@@ -10918,9 +11009,9 @@ var NoteManager = function () {
         }).catch(function () {
             Toast.init('Network Anomaly');
         });
-    }
+    };
 
-    function add() {
+    var add = function add() {
         $.get('/login').then(function (res) {
             if (res.status === 0) {
                 Note.init({
@@ -10931,7 +11022,7 @@ var NoteManager = function () {
                 Toast.init(res.errorMsg);
             }
         });
-    }
+    };
 
     return {
         load: load,
