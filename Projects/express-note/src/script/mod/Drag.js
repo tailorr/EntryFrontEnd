@@ -17,7 +17,7 @@ let Drag = (() => {
                 top: e.pageY - this.disY
             })
         }
-        _up(e) {
+        _up() {
             $(document).off('mousemove')
             $(document).off('onmouseup')
         }
@@ -35,12 +35,15 @@ let Drag = (() => {
         }
     }
     let init = ($obj) => {
+        var drag
         $obj.each(() => {
             let $this = $(this)
             if ($this.hasClass('init')) return
-            return new _Drag($obj)
+            drag = new _Drag($obj)
             $this.addClass('init')
         })
+        console.log(drag)
+        return drag
     }
     return {
         init: init

@@ -10607,15 +10607,33 @@ var Note = function () {
                     }
                 });
 
-                $drag.on('mousedown', function () {
-                    _this.$note.css({
-                        'transition': 'none'
-                    });
-                    Drag.init(_this.$note);
-                    console.log(Drag.init(_this.$note));
+                // $drag.on('mousedown', () => {
+                //     this.$note.css({
+                //         'transition': 'none'
+                //     })
+                //     this.$note.drag = Drag.init(this.$note)
+                //     console.log(this.$note.drag)
+                // }).on('mouseup', () => {
+                // this.$note.drag = null
+                // this.$note.css({
+                //     'transition': 'all 1s'
+                // })
+                //     console.log(this.$note.drag)
+                // })
+
+                $drag.on('mousedown', function (e) {
+                    var disX = e.pageX - _this.$note.offset().left,
+                        //disX 计算事件的触发点在 dialog内部到 dialog 的左边缘的距离
+                    disY = e.pageY - _this.$note.offset().top;
+                    _this.$note.addClass('draggable').data('disPos', { x: disX, y: disY }); //把事件到 dialog 边缘的距离保存下来
                 }).on('mouseup', function () {
-                    _this.$note.css({
-                        'transition': 'all 1s'
+                    _this.$note.removeClass('draggable').removeData('pos');
+                });
+
+                $('body').on('mousemove', function (e) {
+                    $('.draggable').length && $('.draggable').offset({
+                        top: e.pageY - $('.draggable').data('disPos').y, // 当用户鼠标移动时，根据鼠标的位置和前面保存的距离，计算 dialog 的绝对位置
+                        left: e.pageX - $('.draggable').data('disPos').x
                     });
                 });
             }
@@ -10921,7 +10939,7 @@ var Drag = function () {
             }
         }, {
             key: '_up',
-            value: function _up(e) {
+            value: function _up() {
                 $(document).off('mousemove');
                 $(document).off('onmouseup');
             }
@@ -10947,12 +10965,15 @@ var Drag = function () {
     }();
 
     var init = function init($obj) {
+        var drag;
         $obj.each(function () {
             var $this = $(undefined);
             if ($this.hasClass('init')) return;
-            return new _Drag($obj);
+            drag = new _Drag($obj);
             $this.addClass('init');
         });
+        console.log(drag);
+        return drag;
     };
     return {
         init: init

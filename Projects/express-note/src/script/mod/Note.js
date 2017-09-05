@@ -166,17 +166,35 @@ let Note = (() => {
                 }
             })
 
-            $drag.on('mousedown', () => {
-                this.$note.css({
-                    'transition': 'none'
-                })
-                Drag.init(this.$note)
-                console.log(Drag.init(this.$note))
+            // $drag.on('mousedown', () => {
+            //     this.$note.css({
+            //         'transition': 'none'
+            //     })
+            //     this.$note.drag = Drag.init(this.$note)
+            //     console.log(this.$note.drag)
+            // }).on('mouseup', () => {
+            // this.$note.drag = null
+            // this.$note.css({
+            //     'transition': 'all 1s'
+            // })
+            //     console.log(this.$note.drag)
+            // })
+
+            $drag.on('mousedown', e => {
+                var disX = e.pageX - this.$note.offset().left, //disX 计算事件的触发点在 dialog内部到 dialog 的左边缘的距离
+                    disY = e.pageY - this.$note.offset().top;
+                this.$note.addClass('draggable').data('disPos', { x: disX, y: disY }); //把事件到 dialog 边缘的距离保存下来
             }).on('mouseup', () => {
-                this.$note.css({
-                    'transition': 'all 1s'
+                this.$note.removeClass('draggable').removeData('pos');
+            });
+
+            $('body').on('mousemove', e => {
+                $('.draggable').length && $('.draggable').offset({
+                    top: e.pageY - $('.draggable').data('disPos').y, // 当用户鼠标移动时，根据鼠标的位置和前面保存的距离，计算 dialog 的绝对位置
+                    left: e.pageX - $('.draggable').data('disPos').x
                 })
             })
+
         }
 
         /* ---------------------------  以下是数据库的相关操作  ----------------------------- */
