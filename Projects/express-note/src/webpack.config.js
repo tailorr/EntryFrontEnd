@@ -45,6 +45,14 @@ module.exports = {
             jQuery: 'jquery'
         }),
         new ExtractTextPlugin("css/index.css"),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+            },
+            output: {
+                comments: false
+            }
+        })
         // new webpack.LoaderOptionsPlugin({
         //     options: {
         //         postcss: function() {
