@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="伪类三角形">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+    <style>
+        .triangle {
+            margin-top: 40px;
+            width: 100px;
+            height: 50px;
+            border: 1px solid;
+            position: relative;
+            background: #fff;
+        }
+        
+        .triangle-one:before {
+            position: absolute;
+            top: -20px;
+            left: 6px;
+            content: "";
+            border-top: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 10px solid #666;
+            border-left: 10px solid transparent;
+        }
+        
+        .triangle-two:before {
+            position: absolute;
+            right: 0;
+            content: "";
+            border-top: 15px solid red;
+            border-left: 15px solid transparent;
+        }
+        
+        .triangle-three:before {
+            position: absolute;
+            top: -7px;
+            left: 6px;
+            width: 12px;
+            height: 12px;
+            content: "";
+            border-top: 1px solid;
+            border-left: 1px solid;
+            transform: rotate(45deg);
+            background: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="triangle triangle-one"></div>
+    <div class="triangle triangle-two"></div>
+    <div class="triangle triangle-three"></div>
+</body>
+
+</html>

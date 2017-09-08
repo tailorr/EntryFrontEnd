@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="利用行内元素baseline实现居中">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+    <style>
+        .wrapper {
+            max-width: 500px;
+            height: 500px;
+            border: 1px solid red;
+            text-align: center;
+        }
+        
+        .wrapper:before {
+            content: "";
+            display: inline-block;
+            border: 1px solid;
+            height: 100%;
+            vertical-align: middle;
+        }
+        
+        .wrapper img {
+            vertical-align: middle;
+        }
+        
+        .wrapper:after {
+            content: "";
+            display: inline-block;
+            border: 1px solid;
+            height: 100%;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1498033010597&di=118765c4fe5e3a086a9047aa26838295&imgtype=0&src=http%3A%2F%2Fimg.zcool.cn%2Fcommunity%2F01ee3d55411a14000001e71bb12975.jpg" alt="">
+    </div>
+</body>
+
+</html>
