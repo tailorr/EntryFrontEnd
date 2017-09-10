@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>两列自适应布局(浮动)</title>
+    <style>
+        .wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        
+        aside {
+            min-width: 200px;
+            min-height: 500px;
+            background: #ccc;
+            float: left;
+        }
+        
+        main {
+            margin-left: 210px;
+            min-height: 800px;
+            background: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside></aside>
+        <main></main>
+    </div>
+</body>
+
+</html>

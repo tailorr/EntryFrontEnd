@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>三栏自适应布局(FLEX)</title>
+    <style>
+        .layout {
+            max-width: 960px;
+            height: 200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .left {
+            min-width: 200px;
+            height: 400px;
+            background: #ccc;
+        }
+        
+        .middle {
+            min-width: 200px;
+            height: 400px;
+            background: #666;
+            flex-grow: 1;
+            margin: 0 10px;
+        }
+        
+        .right {
+            min-width: 200px;
+            height: 400px;
+            background: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="left"></div>
+        <div class="middle"></div>
+        <div class="right"></div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="description" content="绝对居中">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>JS Bin</title>
+    <style>
+        .wrapper {
+            max-width: 500px;
+            height: 500px;
+            border: 1px solid red;
+            position: relative;
+        }
+        
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* 不固定宽高的居中实现 */
+            /* margin-left: -100px; 固定宽高的居中实现 */
+            /* margin-top: -100px;  固定宽高的居中实现 */
+            background: #ccc;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="content"></div>
+    </div>
+</body>
+
+</html>

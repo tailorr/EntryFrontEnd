@@ -12,9 +12,9 @@ if (process.argv[2]) {
 }
 
 axios.get('http://api.jirengu.com/weather.php', data)
-    .then(function(response) {
+    .then(response => {
 
-        var weather = response.data.results[0].weather_data[0]
+        let weather = response.data.results[0].weather_data[0]
         console.log(response.data.results[0].currentCity)
         console.log(weather.date)
         console.log(weather.temperature)
